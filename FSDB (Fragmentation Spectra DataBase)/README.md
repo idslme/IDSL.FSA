@@ -5,7 +5,7 @@ FSDB objects are R readable objects from one or several msp files. FSDB objects 
 The `msp2FSdb` module of the IDSL.FSA is used to generate FSDB objects. This module was designed to be consistent with various msp structures particularly from NIST, GNPS, MoNA, IDSL.CSA libraries. The `msp2FSdb` module generally can work for any msp file as long as *Num Peaks* lines are available in the msp file.
 
 ## FSDB objects:
-FSDB objects are R lists consisting of seven primary objects
+FSDB objects are R lists consisting of seven primary objects including:
 
 **logFSdb** : parameters used to create the FSDB object
 
