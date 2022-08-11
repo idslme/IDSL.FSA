@@ -39,7 +39,7 @@ The `mgf2msp` convert Mascot generic format files (*.mgf*) into NIST mass spectr
 
 ***path:*** Location of the original msp file
 
-*MGFfileName:* Name of the mgf file with its extension
+***MGFfileName:*** Name of the mgf file with its extension
 
 The converted files are stored in the same directory with an *.msp* extension.
 
@@ -50,9 +50,9 @@ In many instances, msp public libraries include both positive and negative fragm
 
 ***path:*** Location of the original msp file
 
-*mspFileName:* Name of the msp file with its extension
+***mspFileName:*** Name of the msp file with its extension
 
-*number_processing_threads:* number of parallel processing threads compatible with the Windows and Linux environments
+***number_processing_threads:*** number of parallel processing threads compatible with the Windows and Linux environments
 
 The isolated MSP blocks are stored in the same directory with "POS_" and "NEG_" prefixes.
 
@@ -61,13 +61,13 @@ The `FSdb2precursorType` can detect potential ionization pathways for molecular 
 
 	FSdb2precursorType(InChIKeyVector, libFSdb, tableIndicator = "Frequency", number_processing_threads = 1)
 
-*InChIKeyVector:* A vector of InChIKey values. This value may contain whole InChIKey strings or first 14 InChIKey letters.
+***InChIKeyVector:*** A vector of InChIKey values. This value may contain whole InChIKey strings or first 14 InChIKey letters.
 
-*libFSdb:* A converted MSP library reference file using the `msp2FSdb` module which is an FSDB produced by the IDSL.FSA package.
+***libFSdb:*** A converted MSP library reference file using the `msp2FSdb` module which is an FSDB produced by the IDSL.FSA package.
 
-*tableIndicator:* c("Frequency", "PrecursorMZ"). To show frequency or a median of *PrecursorMZ* values in the output dataframe for each precursor type.
+***tableIndicator:*** c("Frequency", "PrecursorMZ"). To show frequency or a median of *PrecursorMZ* values in the output dataframe for each precursor type.
 
-*number_processing_threads:* number of parallel processing threads compatible with the Windows and Linux environments
+***number_processing_threads:*** number of parallel processing threads compatible with the Windows and Linux environments
 
 A matrix of frequency for each InChIKey in the FSDB. The matrix column headers represent precursor types.
 
@@ -81,25 +81,25 @@ This `FSA_Cytoscape_files_genenerator` module performs pairwise MSP blocks analy
 
 ***path:*** address of msp file
 
-*MSPfile:* name of msp file
+***MSPfile:*** name of msp file
 
-*mspVariableVector:* a vector of msp variables
+***mspVariableVector:*** a vector of msp variables
 
-*mspNodeID:* msp Node ID which is the ID that is required for the `specsim' ID generation
+***mspNodeID:*** msp Node ID which is the ID that is required for the `specsim' ID generation
 
-*massError:* Mass accuracy in Da
+***massError:*** Mass accuracy in Da
 
-*RTtolerance:* Retention time tolerance (min) to match msp blocks. Select *NA* to ignore retention time match. This option is so helpful to find co-occurring compounds.
+***RTtolerance:*** Retention time tolerance (min) to match msp blocks. Select *NA* to ignore retention time match. This option is so helpful to find co-occurring compounds.
 
-*minEntropySimilarity:* Minimum entropy similarity score
+***minEntropySimilarity:*** Minimum entropy similarity score
 
-*noiseRemovalRatio:* Noise level removal relative to the basepeak to measure entropy similarity score (in percent)
+***noiseRemovalRatio:*** Noise level removal relative to the basepeak to measure entropy similarity score (in percent)
 
-*allowedNominalMass:* c(TRUE, FALSE). Select `TRUE` only for nominal mass analysis.
+***allowedNominalMass:*** c(TRUE, FALSE). Select `TRUE` only for nominal mass analysis.
 
-*allowedWeightedSpectralEntropy:* c(TRUE, FALSE). Weighted entropy to measure entropy similarity score.
+***allowedWeightedSpectralEntropy:*** c(TRUE, FALSE). Weighted entropy to measure entropy similarity score.
 
-*number_processing_threads:* number of parallel processing threads compatible with the Windows and Linux environments
+***number_processing_threads:*** number of parallel processing threads compatible with the Windows and Linux environments
 
 ### `FSA_uniqueMSPblockTagger`
 This `FSA_uniqueMSPblockTagger` module performs pairwise MSP blocks analysis to create Cytoscape networks files. This function is especially beneficial to find related peaks in an analysis.
@@ -111,23 +111,23 @@ This `FSA_uniqueMSPblockTagger` module performs pairwise MSP blocks analysis to 
 
 ***path:*** address of msp file
 
-*MSPfile:* name of msp file
+***MSPfile:*** name of msp file
 
-*aggregateBy:* a variable to aggregate the MSP blocks based on
+***aggregateBy:*** a variable to aggregate the MSP blocks based on
 
-*massError:* Mass accuracy in Da
+***massError:*** Mass accuracy in Da
 
-*RTtolerance:* Retention time tolerance (min) to match msp blocks. Select *NA* to ignore retention time match. This option is so helpful to find co-occurring compounds.
+***RTtolerance:*** Retention time tolerance (min) to match msp blocks. Select *NA* to ignore retention time match. This option is so helpful to find co-occurring compounds.
 
-*minEntropySimilarity:* Minimum entropy similarity score
+***minEntropySimilarity:*** Minimum entropy similarity score
 
-*noiseRemovalRatio:* Noise level removal relative to the basepeak to measure entropy similarity score (in percent)
+***noiseRemovalRatio:*** Noise level removal relative to the basepeak to measure entropy similarity score (in percent)
 
-*allowedNominalMass:* c(TRUE, FALSE). Select `TRUE` only for nominal mass analysis.
+***allowedNominalMass:*** c(TRUE, FALSE). Select `TRUE` only for nominal mass analysis.
 
-*allowedWeightedSpectralEntropy:* c(TRUE, FALSE). Weighted entropy to measure entropy similarity score.
+***allowedWeightedSpectralEntropy:*** c(TRUE, FALSE). Weighted entropy to measure entropy similarity score.
 
-*number_processing_threads:* number of parallel processing threads compatible with the Windows and Linux environments
+***number_processing_threads:*** number of parallel processing threads compatible with the Windows and Linux environments
 
 ##
 Visit https://fsa.idsl.me/ for the detailed documentation and tutorial.
