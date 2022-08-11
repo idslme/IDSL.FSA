@@ -30,14 +30,14 @@ FSDB objects are R lists consisting of seven primary objects including:
 **MSPLibraryParameters**: A dataframe of tabulated headers and their values for each msp block
 
 ## MSP files management
-IDSL.FSA was designed to manage MSP format mass spectrometry files with different structures. IDSL.FSA provide various tools to manage *msp* files which a number of them are summerized below:
+IDSL.FSA was designed to manage MSP format mass spectrometry files with different structures. IDSL.FSA provide various tools to manage *msp* files which a number of them are summarized below:
 
 ### `mgf2msp`
-The `mgf2msp` convert Mascot generic format files (*.mgf*) into NIST mass spectra format (*.msp*). The *`mgf2msp`* module is fast which requires <2 sec for mgf files with ~5,000 fragmentation blocks on a single thread.
+The `mgf2msp` convert Mascot generic format files (*.mgf*) into NIST mass spectra format (*.msp*). The `mgf2msp` module is fast which requires <2 sec for mgf files with ~5,000 fragmentation blocks on a single thread.
 
 	mgf2msp(path = getwd(), MGFfileName = "")
 
-*path:* Location of the original msp file
+***path:*** Location of the original msp file
 
 *MGFfileName:* Name of the mgf file with its extension
 
@@ -48,7 +48,7 @@ In many instances, msp public libraries include both positive and negative fragm
 
 	mspSpiltterPosNeg(path = getwd(), mspFileName = "", number_processing_threads = 1)
 
-*path:* Location of the original msp file
+***path:*** Location of the original msp file
 
 *mspFileName:* Name of the msp file with its extension
 
@@ -79,7 +79,7 @@ This `FSA_Cytoscape_files_genenerator` module performs pairwise MSP blocks analy
 	noiseRemovalRatio = 0.01, allowedNominalMass = FALSE, 
 	allowedWeightedSpectralEntropy = TRUE, number_processing_threads = 1)
 
-*path:* address of msp file
+***path:*** address of msp file
 
 *MSPfile:* name of msp file
 
@@ -89,7 +89,7 @@ This `FSA_Cytoscape_files_genenerator` module performs pairwise MSP blocks analy
 
 *massError:* Mass accuracy in Da
 
-*RTtolerance:* Retention time tolerance (min) to match msp blocks. Select *NA* to ignore retention time match. This option is so helpful to find co-occuring compounds.
+*RTtolerance:* Retention time tolerance (min) to match msp blocks. Select *NA* to ignore retention time match. This option is so helpful to find co-occurring compounds.
 
 *minEntropySimilarity:* Minimum entropy similarity score
 
@@ -109,7 +109,7 @@ This `FSA_uniqueMSPblockTagger` module performs pairwise MSP blocks analysis to 
 	allowedNominalMass = FALSE, allowedWeightedSpectralEntropy = TRUE, 
 	number_processing_threads = 1)
 
-*path:* address of msp file
+***path:*** address of msp file
 
 *MSPfile:* name of msp file
 
@@ -117,7 +117,7 @@ This `FSA_uniqueMSPblockTagger` module performs pairwise MSP blocks analysis to 
 
 *massError:* Mass accuracy in Da
 
-*RTtolerance:* Retention time tolerance (min) to match msp blocks. Select *NA* to ignore retention time match. This option is so helpful to find co-occuring compounds.
+*RTtolerance:* Retention time tolerance (min) to match msp blocks. Select *NA* to ignore retention time match. This option is so helpful to find co-occurring compounds.
 
 *minEntropySimilarity:* Minimum entropy similarity score
 
