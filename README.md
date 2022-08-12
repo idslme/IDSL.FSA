@@ -6,6 +6,8 @@
 
 The Fragmentation Spectra Analysis (IDSL.FSA) package was designed to annotate standard .msp (mass spectra format) and .mgf (Mascot generic format) files using mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME). IDSL.FSA also provides a number of modules to convert and manipulate MSP and MGF files.
 
+	install.packages("IDSL.FSA") # IDSL.FSA package is set to release on CRAN by the end of August
+
 ## FSDB (Fragmentation Spectra DataBase)
 FSDB objects are R readable objects from one or several msp files. FSDB objects facilitate msp annotation and msp data parsing in the R environment. In the *FSDB (Fragmentation Spectra DataBase)* folder, we uploaded FSDB files for GNPS and MoNA public libraries.
 
@@ -74,10 +76,9 @@ A matrix of frequency for each InChIKey in the FSDB. The matrix column headers r
 ### `FSA_Cytoscape_files_genenerator`
 This `FSA_Cytoscape_files_genenerator` module performs pairwise MSP blocks analysis to create Cytoscape networks files. This function is especially beneficial to find related peaks in an analysis.
 
-	FSA_Cytoscape_files_genenerator(path, MSPfile, mspVariableVector = NULL,
-	mspNodeID = NULL, massError = 0.01, RTtolerance = NA, minEntropySimilarity = 0.75,
-	noiseRemovalRatio = 0.01, allowedNominalMass = FALSE, 
-	allowedWeightedSpectralEntropy = TRUE, number_processing_threads = 1)
+	FSA_Cytoscape_files_genenerator(path, MSPfile, mspVariableVector = NULL, mspNodeID = NULL,
+	massError = 0.01, RTtolerance = NA, minEntropySimilarity = 0.75, noiseRemovalRatio = 0.01,
+	allowedNominalMass = FALSE, allowedWeightedSpectralEntropy = TRUE, number_processing_threads = 1)
 
 ***path:*** address of msp file
 
@@ -95,19 +96,18 @@ This `FSA_Cytoscape_files_genenerator` module performs pairwise MSP blocks analy
 
 ***noiseRemovalRatio:*** Noise level removal relative to the basepeak to measure entropy similarity score (in percent)
 
-***allowedNominalMass:*** c(TRUE, FALSE). Select `TRUE` only for nominal mass analysis.
+***allowedNominalMass:*** c(`TRUE`, `FALSE`). Select `TRUE` only for nominal mass analysis.
 
-***allowedWeightedSpectralEntropy:*** c(TRUE, FALSE). Weighted entropy to measure entropy similarity score.
+***allowedWeightedSpectralEntropy:*** c(`TRUE`, `FALSE`). Weighted entropy to measure entropy similarity score.
 
 ***number_processing_threads:*** number of parallel processing threads compatible with the Windows and Linux environments
 
 ### `FSA_uniqueMSPblockTagger`
 This `FSA_uniqueMSPblockTagger` module performs pairwise MSP blocks analysis to create Cytoscape networks files. This function is especially beneficial to find related peaks in an analysis.
 
-	FSA_uniqueMSPblockTagger(path, MSPfile, aggregateBy = "Name", massError = 0.01,
-	RTtolerance = NA, minEntropySimilarity = 0.75, noiseRemovalRatio = 0.01,
-	allowedNominalMass = FALSE, allowedWeightedSpectralEntropy = TRUE, 
-	number_processing_threads = 1)
+	FSA_uniqueMSPblockTagger(path, MSPfile, aggregateBy = "Name", massError = 0.01, RTtolerance = NA,
+	minEntropySimilarity = 0.75, noiseRemovalRatio = 0.01, allowedNominalMass = FALSE,
+	allowedWeightedSpectralEntropy = TRUE, number_processing_threads = 1)
 
 ***path:*** address of msp file
 
@@ -123,9 +123,9 @@ This `FSA_uniqueMSPblockTagger` module performs pairwise MSP blocks analysis to 
 
 ***noiseRemovalRatio:*** Noise level removal relative to the basepeak to measure entropy similarity score (in percent)
 
-***allowedNominalMass:*** c(TRUE, FALSE). Select `TRUE` only for nominal mass analysis.
+***allowedNominalMass:*** c(`TRUE`, `FALSE`). Select `TRUE` only for nominal mass analysis.
 
-***allowedWeightedSpectralEntropy:*** c(TRUE, FALSE). Weighted entropy to measure entropy similarity score.
+***allowedWeightedSpectralEntropy:*** c(`TRUE`, `FALSE`). Weighted entropy to measure entropy similarity score.
 
 ***number_processing_threads:*** number of parallel processing threads compatible with the Windows and Linux environments
 
