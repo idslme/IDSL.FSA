@@ -73,10 +73,10 @@ The `FSdb2precursorType` can detect potential ionization pathways for molecular 
 
 A matrix of frequency for each InChIKey in the FSDB. The matrix column headers represent precursor types.
 
-### `FSA_Cytoscape_files_genenerator`
-This `FSA_Cytoscape_files_genenerator` module performs pairwise MSP blocks analysis to create Cytoscape networks files. This function is especially beneficial to find related peaks in an analysis.
+### `FSA_msp2Cytoscape`
+This `FSA_msp2Cytoscape` module performs pairwise MSP blocks analysis to create Cytoscape networks files. This function is especially beneficial to find related peaks in an analysis.
 
-	FSA_Cytoscape_files_genenerator(path, MSPfile, mspVariableVector = NULL, mspNodeID = NULL,
+	FSA_msp2Cytoscape(path, MSPfile, mspVariableVector = NULL, mspNodeID = NULL,
 	massError = 0.01, RTtolerance = NA, minEntropySimilarity = 0.75, noiseRemovalRatio = 0.01,
 	allowedNominalMass = FALSE, allowedWeightedSpectralEntropy = TRUE, number_processing_threads = 1)
 
