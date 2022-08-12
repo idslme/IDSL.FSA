@@ -9,6 +9,6 @@ The Fragmentation Spectra Analysis (IDSL.FSA) package was designed to annotate .
 	install.packages("IDSL.FSA") # IDSL.FSA package is set to release on CRAN by the end of August
 
 ##
-Visit [**wiki**](https://github.com/idslme/IDSL.FSA/wiki) for the detailed documentation and tutorial.
+Visit [**wiki**](https://github.com/idslme/IDSL.FSA/wiki) for the detailed documentation and tutorial on [**FSDB (Fragmentation Spectra DataBase)**](https://github.com/idslme/IDSL.FSA/wiki/FSDB-(Fragmentation-Spectra-DataBase)) and [**MSP files management**](https://github.com/idslme/IDSL.FSA/wiki/MSP-files-management).
 
 Visit https://fsa.idsl.me/.
