@@ -4,7 +4,7 @@
 [![Maintainer](https://img.shields.io/badge/maintainer-Sadjad_Fakouri_Baygi-blue)](https://github.com/sajfb)
 <!-- badges: end -->
 
-[**Fragmentation Spectra Analysis (FSA)**](https://www.fsa.idsl.me/) by the Integrated Data Science Laboratory for Metabolomics and Exposomics ([**IDSL.ME**](https://www.idsl.me/)) is an R package designed to annotate ***.msp*** (mass spectra format) and ***.mgf*** (Mascot generic format) files using a combination of mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME) criteria. IDSL.FSA also provides a number of modules to convert and manipulate MSP and MGF files.
+[**Fragmentation Spectra Analysis (FSA)**](https://www.fsa.idsl.me/) by the Integrated Data Science Laboratory for Metabolomics and Exposomics ([**IDSL.ME**](https://www.idsl.me/)) is an R package designed to annotate ***.msp*** (mass spectra format) and ***.mgf*** (Mascot generic format) files using a combination of mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME) criteria. IDSL.FSA also provides a number of modules to convert and manipulate *.msp* and *.mgf* files.
 
 	install.packages("IDSL.FSA") # IDSL.FSA package is set to release on CRAN by the end of September
 
