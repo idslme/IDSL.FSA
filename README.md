@@ -9,7 +9,7 @@
 	install.packages("IDSL.FSA") # IDSL.FSA package is set to release on CRAN by the end of September
 
 ## Workflow
-IDSL.FSA requires [**FSDB (Fragmentation Spectra DataBase)**](https://github.com/idslme/IDSL.FSA/wiki/FSDB-(Fragmentation-Spectra-DataBase)) objects (*.Rdata*) to rapidly annotate mass spectrometry data (**.msp**, **.mgf**). IDSL.FSA is also able to generate FSDB objects from several reference *.msp* files with inconsistent settings. When the reference *.msp* files or FSDB objects are available, to annotate *.msp* and *.mgf* files, download the [FSA parameter spreadsheet](https://raw.githubusercontent.com/idslme/IDSL.FSA/main/FSA_parameters.xlsx) and select the parameters accordingly and then use this spreadsheet as the input for the IDSL.FSA workflow:
+IDSL.FSA requires [**FSDB (Fragmentation Spectra DataBase)**](https://github.com/idslme/IDSL.FSA/wiki/FSDB-(Fragmentation-Spectra-DataBase)) objects (*.Rdata*) to rapidly annotate mass spectrometry data (***.msp*** and ***.mgf***). IDSL.FSA is also able to generate FSDB objects from several reference *.msp* files with inconsistent settings. When the reference *.msp* files or FSDB objects are available, to annotate *.msp* and *.mgf* files, download the [FSA parameter spreadsheet](https://raw.githubusercontent.com/idslme/IDSL.FSA/main/FSA_parameters.xlsx) and select the parameters accordingly and then use this spreadsheet as the input for the IDSL.FSA workflow:
 
 	library(IDSL.FSA)
 	IDSL.FSA_workflow("Address of the FSA parameter spreadsheet")
