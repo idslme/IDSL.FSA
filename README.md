@@ -15,6 +15,6 @@ IDSL.FSA requires [**Fragmentation Spectra DataBase (FSDB)**](https://github.com
 	FSA_workflow("Address of the FSA parameter spreadsheet")
 
 
-Visit [**wiki**](https://github.com/idslme/IDSL.FSA/wiki) for the detailed documentations and tutorials on specific functions for [**FSDB (Fragmentation Spectra DataBase)**](https://github.com/idslme/IDSL.FSA/wiki/FSDB-(Fragmentation-Spectra-DataBase)), [**MSP files management**](https://github.com/idslme/IDSL.FSA/wiki/MSP-files-management), [**Spectra Correction**](https://github.com/idslme/IDSL.FSA/wiki/Spectra-Correction), and [**Spectral Entropy**](https://github.com/idslme/IDSL.FSA/wiki/Spectral-Entropy).
+Visit [**wiki**](https://github.com/idslme/IDSL.FSA/wiki) for the detailed documentations and tutorials on specific functions for [**Fragmentation Spectra DataBase (FSDB)**](https://github.com/idslme/IDSL.FSA/wiki/Fragmentation-Spectra-DataBase-(FSDB)), [**MSP files management**](https://github.com/idslme/IDSL.FSA/wiki/MSP-files-management), and [**Spectral Similarity Metrics in IDSL.FSA**](https://github.com/idslme/IDSL.FSA/wiki/Spectral-Similarity-Metrics-in-IDSL.FSA).
 
 Visit https://fsa.idsl.me/ for the detailed documentation and tutorial.
