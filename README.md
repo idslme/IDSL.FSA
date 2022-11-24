@@ -19,7 +19,7 @@ IDSL.FSA requires [**Fragmentation Spectra DataBase (FSDB)**](https://github.com
 	FSA_workflow("Address of the FSA parameter spreadsheet")
 
 
-Visit [**wiki**](https://github.com/idslme/IDSL.FSA/wiki) for the detailed documentations and tutorials on specific functions for [**Fragmentation Spectra DataBase (FSDB)**](https://github.com/idslme/IDSL.FSA/wiki/Fragmentation-Spectra-DataBase-(FSDB)), [**MSP files management**](https://github.com/idslme/IDSL.FSA/wiki/MSP-Files-Management), [**MSP Standardizations**](https://github.com/idslme/IDSL.FSA/wiki/MSP-Standardizations), [**Spectral Similarity Metrics**](https://github.com/idslme/IDSL.FSA/wiki/Spectral-Similarity-Metrics), and [**Raw data conversion into .mgf format**](https://github.com/idslme/IDSL.FSA/wiki/Proteowizard-MSConvert-for-MGF-files).
+Visit [**wiki**](https://github.com/idslme/IDSL.FSA/wiki) for the detailed documentations and tutorials on specific functions for [**Fragmentation Spectra DataBase (FSDB)**](https://github.com/idslme/IDSL.FSA/wiki/Fragmentation-Spectra-DataBase-(FSDB)), [**MSP files management**](https://github.com/idslme/IDSL.FSA/wiki/MSP-Files-Management), [**MSP Standardizations**](https://github.com/idslme/IDSL.FSA/wiki/MSP-Standardizations), [**Spectral Similarity Metrics**](https://github.com/idslme/IDSL.FSA/wiki/Spectral-Similarity-Metrics), and [**Raw data conversion into .mgf format**](https://github.com/idslme/IDSL.FSA/wiki/Proteowizard-MSConvert-for-MGF-Conversion).
 
 Visit https://fsa.idsl.me/ for the detailed documentation and tutorial.
 
