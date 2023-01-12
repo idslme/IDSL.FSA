@@ -1,0 +1,19 @@
+\name{FSA_logRecorder}
+\alias{FSA_logRecorder}
+\title{
+FSA_logRecorder
+}
+\description{
+FSA_logRecorder
+}
+\usage{
+FSA_logRecorder(messageQuote, printMessage = TRUE)
+}
+\arguments{
+  \item{messageQuote}{
+messageQuote
+}
+  \item{printMessage}{
+printMessage
+}
+}

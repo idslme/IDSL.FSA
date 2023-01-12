@@ -1,0 +1,40 @@
+\name{FSdb2PeakXcolSubsetter}
+\alias{FSdb2PeakXcolSubsetter}
+\title{
+FSdb2PeakXcolSubsetter
+}
+\description{
+FSdb2PeakXcolSubsetter
+}
+\usage{
+FSdb2PeakXcolSubsetter(FSdb_address, peak_alignment_folder,
+metavariable = "idsl.ipa_collective_peakids", number_processing_threads = 1)
+}
+\arguments{
+  \item{FSdb_address}{
+FSdb_address
+}
+  \item{peak_alignment_folder}{
+peak_alignment_folder
+}
+  \item{metavariable}{
+metavariable
+}
+  \item{number_processing_threads}{
+Number of processing threads for multi-threaded processing
+}
+}
+\value{
+  \item{peakXcol}{
+peakXcol
+}
+  \item{peak_height}{
+peak_height
+}
+  \item{peak_area}{
+peak_area
+}
+  \item{peak_R13C}{
+peak_R13C
+}
+}
