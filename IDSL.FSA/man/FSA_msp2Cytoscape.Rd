@@ -41,7 +41,7 @@ c(TRUE, FALSE). Select `TRUE` only for nominal mass analysis.
 c(TRUE, FALSE). Weighted entropy to measure entropy similarity score.
 }
   \item{noiseRemovalRatio}{
-Noise level removal relative to the basepeak to measure entropy similarity score (in percent)
+noise removal ratio relative to the basepeak to measure entropy similarity score (in percent)
 }
   \item{number_processing_threads}{
 Number of processing threads for multi-threaded processing

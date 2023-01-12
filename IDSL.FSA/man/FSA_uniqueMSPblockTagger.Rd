@@ -33,7 +33,7 @@ Retention time tolerance (min) to match msp blocks. Select \emph{NA} to ignore r
 Minimum entropy similarity score
 }
   \item{noiseRemovalRatio}{
-Noise level removal relative to the basepeak to measure entropy similarity score (in percent)
+noise removal ratio relative to the basepeak to measure entropy similarity score (in percent)
 }
   \item{allowedNominalMass}{
 c(TRUE, FALSE). Select `TRUE` only for nominal mass analysis.

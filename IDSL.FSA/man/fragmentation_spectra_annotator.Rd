@@ -42,7 +42,7 @@ c(TRUE, FALSE). Select `TRUE` only for nominal mass analysis.
 c(TRUE, FALSE). Weighted entropy to transform low abundant signals prior to calculating entropy similarity score. Please see the reference for details on wight transformation.
 }
   \item{noiseRemovalRatio}{
-Noise level removal ([0 - 1])relative to the basepeak to measure entropy similarity score.
+noise removal ratio ([0 - 1])relative to the basepeak to measure entropy similarity score.
 }
   \item{roundingDigitPrefiltering}{
 Level of pre-filtering

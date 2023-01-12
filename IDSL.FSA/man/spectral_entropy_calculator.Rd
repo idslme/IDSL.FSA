@@ -18,7 +18,7 @@ A matrix (m/z, int) of fragmentation pattern after intensity adjustment
 c(TRUE, FALSE). Weighted entropy to transform low abundant signals prior to calculating entropy similarity score. Please see the reference for details on weight transformation.
 }
   \item{noiseRemovalRatio}{
-Noise level removal ([0 - 1])relative to the basepeak to measure entropy similarity score.
+noise removal ratio ([0 - 1])relative to the basepeak to measure entropy similarity score.
 }
 }
 \value{

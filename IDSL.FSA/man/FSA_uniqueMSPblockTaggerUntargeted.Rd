@@ -36,7 +36,7 @@ Mass accuracy (Da) to find precursor m/z in .msp files
 Retention time tolerance (min)
 }
   \item{noiseRemovalRatio}{
-Noise level removal ([0 - 1])relative to the basepeak to measure entropy similarity score.
+noise removal ratio ([0 - 1])relative to the basepeak to measure entropy similarity score.
 }
   \item{allowedNominalMass}{
 c(TRUE, FALSE). Select `TRUE` only for nominal mass analysis.
