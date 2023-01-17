@@ -11,22 +11,45 @@
 [![DOI](https://zenodo.org/badge/140601694.svg)](https://zenodo.org/record/7530397#.Y8Byuv7MK70)
 <!-- badges: end -->
 
-**Fragmentation Spectra Analysis (FSA)** by the [**Integrated Data Science Laboratory for Metabolomics and Exposomics (IDSL.ME)**](https://www.idsl.me/) is an R package designed to annotate ***.msp*** (mass spectra format) and ***.mgf*** (Mascot generic format) files using a combination of mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME) criteria. IDSL.FSA also provides a number of modules to convert and manipulate *.msp* and *.mgf* files.
+**Fragmentation Spectra Analysis (FSA)** by the [**Integrated Data Science Laboratory for Metabolomics and Exposomics (IDSL.ME)**](https://www.idsl.me) is an R package designed to annotate ***.msp*** (mass spectra format) and ***.mgf*** (Mascot generic format) files using a combination of mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME) criteria followed by intelligent pre-filtering steps for rapid searches. IDSL.FSA also provides a number of modules to convert and manipulate *.msp* and *.mgf* files.
+
+## Table of Contents
+
+- [Features of IDSL.FSA](https://github.com/idslme/IDSL.FSA#features-of-idslfsa)
+- [Installation](https://github.com/idslme/IDSL.FSA#installation)
+- [Workflow](https://github.com/idslme/IDSL.FSA#workflow)
+- [Simple Batch Example](https://github.com/idslme/IDSL.FSA#simple-batch-example)
+- [Wiki](https://github.com/idslme/IDSL.FSA#wiki)
+- [Citation](https://github.com/idslme/IDSL.FSA#citation)
+
+## Features of IDSL.FSA
+
+1) Parameter selection through a well-described [parameter spreadsheet](https://raw.githubusercontent.com/idslme/IDSL.FSA/main/FSA_parameters.xlsx)
+2) Consistency with *.msp* and *.mgf* file formats
+3) Measuring matching variables including mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME)
+4) Spectra annotation regardless of presence of precursor values
+5) Spectra annotation using optional criteria including retention time and adduct type
+6) Generating batch spectra figure match
+7) Process high-throughput and population size studies
+8) Compatibility with parallel processing in Windows and Linux environments
 
 ## Installation
 
 	install.packages("IDSL.FSA")
 
 ## Workflow
+
 IDSL.FSA requires [**Fragmentation Spectra DataBase (FSDB)**](https://github.com/idslme/IDSL.FSA/wiki/Fragmentation-Spectra-DataBase-(FSDB)) objects (*.Rdata*) to rapidly annotate mass spectrometry data (***.msp*** and ***.mgf***). IDSL.FSA is also able to generate **FSDB** objects from several reference *.msp* files even with inconsistent settings. When the reference *.msp* files or **FSDB** objects are available, to annotate *.msp* and *.mgf* files, download the [FSA parameter spreadsheet](https://raw.githubusercontent.com/idslme/IDSL.FSA/main/FSA_parameters.xlsx) and select the parameters accordingly and then use this spreadsheet as the input for the IDSL.FSA workflow:
 
 	library(IDSL.FSA)
 	FSA_workflow("Address of the FSA parameter spreadsheet")
 
+## [**Wiki**](https://github.com/idslme/IDSL.FSA/wiki)
 
-Visit [**wiki**](https://github.com/idslme/IDSL.FSA/wiki) for the detailed documentations and tutorials on specific functions for [**Fragmentation Spectra DataBase (FSDB)**](https://github.com/idslme/IDSL.FSA/wiki/Fragmentation-Spectra-DataBase-(FSDB)), [**MSP files management**](https://github.com/idslme/IDSL.FSA/wiki/MSP-Files-Management), [**MSP Standardizations**](https://github.com/idslme/IDSL.FSA/wiki/MSP-Standardizations), and [**Spectral Similarity Metrics**](https://github.com/idslme/IDSL.FSA/wiki/Spectral-Similarity-Metrics).
-
-Visit https://fsa.idsl.me/ for the detailed documentation and tutorial.
+1. [**Fragmentation Spectra DataBase (FSDB)**](https://github.com/idslme/IDSL.FSA/wiki/Fragmentation-Spectra-DataBase-(FSDB))
+2. [**MSP files management**](https://github.com/idslme/IDSL.FSA/wiki/MSP-Files-Management)
+3. [**MSP Standardizations**](https://github.com/idslme/IDSL.FSA/wiki/MSP-Standardizations)
+4. [**Spectral Similarity Metrics**](https://github.com/idslme/IDSL.FSA/wiki/Spectral-Similarity-Metrics)
 
 ## Citation
 
