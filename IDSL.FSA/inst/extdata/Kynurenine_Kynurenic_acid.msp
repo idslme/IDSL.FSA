@@ -1,0 +1,71 @@
+Name: Kynurenic acid
+Synon: $:00in-source
+DB#: FiehnHILIC000465
+InChIKey: HCZHHEIFKROPDY-UHFFFAOYSA-N
+Precursor_type: [M+H]+
+Spectrum_type: MS2
+PrecursorMZ: 190.0498
+Instrument_type: LC-ESI-QFT
+Instrument: Thermo Q Exactive HF
+Ion_mode: P
+Collision_energy: HCD (NCE 20-30-40%)
+Formula: C10H7NO3
+MW: 189
+ExactMass: 189.04259308399998
+Comments: "computed SMILES=C1=CC2=C(C=C1)NC(=CC2=O)C(=O)O" "computed InChI=InChI=1S/C10H7NO3/c12-9-5-8(10(13)14)11-7-4-2-1-3-6(7)9/h1-5H,(H,11,12)(H,13,14)" "isotope=M + 0" "scan number=1102" "retention time=6.145667" "author=Michael Sa and Megan Showalter" "column=Waters Acquity UPLC BEH Amide column (2.1 x 150mm: 1.7µm)" "computed mass accuracy=0.36350472329168265" "computed mass error=-6.908399996063963E-5" "SPLASH=splash10-01ox-0900000000-8bb4ba59c2be4c784835" "submitter=Megan Showalter (University of California, Davis)" "MoNA Rating=5.0"
+Num Peaks: 10
+51.40519 0.146304
+51.64487 0.195926
+53.96609 0.191252
+79.06789 0.161991
+133.04967 0.190099
+140.81216 0.185617
+144.0453 0.321485
+162.05499 95.599607
+172.03882 0.192468
+190.04993 100.000000
+
+
+Name: Kynurenine
+Synon: $:00in-source
+DB#: FiehnHILIC000466
+InChIKey: YGPSJZOEDVAXAB-QMMMGPOBSA-N
+Precursor_type: [M+H]+
+Spectrum_type: MS2
+PrecursorMZ: 209.0918
+Instrument_type: LC-ESI-QFT
+Instrument: Thermo Q Exactive HF
+Ion_mode: P
+Collision_energy: HCD (NCE 20-30-40%)
+Formula: C10H12N2O3
+MW: 208
+ExactMass: 208.08479224399997
+Comments: "computed SMILES=C1=CC(=C(C=C1)N)C(=O)C[C@@H](C(=O)O)N" "computed InChI=InChI=1S/C10H12N2O3/c11-7-4-2-1-3-6(7)9(13)5-8(12)10(14)15/h1-4,8H,5,11-12H2,(H,14,15)/t8-/m0/s1" "isotope=M + 0" "scan number=1253" "retention time=6.867717" "author=Michael Sa and Megan Showalter" "column=Waters Acquity UPLC BEH Amide column (2.1 x 150mm: 1.7µm)" "computed mass accuracy=1.2829006204672802" "computed mass error=-2.6824399995462045E-4" "SPLASH=splash10-0006-3900000000-75335237efe01c44bf84" "submitter=Megan Showalter (University of California, Davis)" "MoNA Rating=5.0"
+Num Peaks: 24
+67.70916 0.632913
+74.02431 16.129177
+74.68593 0.639020
+87.04465 0.622443
+88.0397 3.422109
+88.05368 0.586586
+94.06561 100.000000
+98.9403 0.672827
+99.00801 11.673705
+103.03953 0.810280
+104.04969 2.437733
+118.06535 10.802441
+120.03519 1.088545
+120.04459 24.520931
+132.04427 2.983314
+136.07567 48.715308
+146.06001 59.189755
+150.05498 28.303489
+163.08655 10.026928
+164.07085 7.325587
+174.05501 36.572665
+191.55615 0.763168
+192.06544 69.476321
+209.09201 4.175200
+
+
+
