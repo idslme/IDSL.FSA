@@ -11,25 +11,25 @@
 [![DOI](https://zenodo.org/badge/140601694.svg)](https://zenodo.org/record/7530397#.Y8Byuv7MK70)
 <!-- badges: end -->
 
-**Fragmentation Spectra Analysis (FSA)** by the [**Integrated Data Science Laboratory for Metabolomics and Exposomics (IDSL.ME)**](https://www.idsl.me) is an R package designed to annotate ***.msp*** (mass spectra format) and ***.mgf*** (Mascot generic format) files using a combination of mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME) criteria followed by intelligent pre-filtering steps for rapid searches. IDSL.FSA also provides a number of modules to convert and manipulate *.msp* and *.mgf* files.
+**Fragmentation Spectra Analysis (FSA)** by the [**Integrated Data Science Laboratory for Metabolomics and Exposomics (IDSL.ME)**](https://www.idsl.me) is an R package designed to annotate ***.msp*** (mass spectra format) and ***.mgf*** (Mascot generic format) files using a combination of mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME) criteria followed by intelligent pre-filtering steps for rapid searches. IDSL.FSA also provides a number of modules to convert and manipulate ***.msp*** and ***.mgf*** files.
 
 ## Table of Contents
 
 - [Features of IDSL.FSA](https://github.com/idslme/IDSL.FSA#features-of-idslfsa)
 - [Installation](https://github.com/idslme/IDSL.FSA#installation)
 - [Workflow](https://github.com/idslme/IDSL.FSA#workflow)
-- [Simple Batch Example](https://github.com/idslme/IDSL.FSA#simple-batch-example)
+- [Quick Batch Example](https://github.com/idslme/IDSL.FSA#quick-batch-example)
 - [Wiki](https://github.com/idslme/IDSL.FSA#wiki)
 - [Citation](https://github.com/idslme/IDSL.FSA#citation)
 
 ## Features of IDSL.FSA
 
 1) Parameter selection through a well-described [parameter spreadsheet](https://raw.githubusercontent.com/idslme/IDSL.FSA/main/FSA_parameters.xlsx)
-2) Consistency with *.msp* and *.mgf* file formats
+2) Consistency with ***.msp*** and ***.mgf*** file formats
 3) Measuring matching variables including mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME)
 4) Spectra annotation regardless of presence of precursor values
 5) Spectra annotation using optional criteria including retention time and adduct type
-6) Generating batch spectra figure match
+6) Generating batch spectra match figures
 7) Process high-throughput and population size studies
 8) Compatibility with parallel processing in Windows and Linux environments
 
@@ -43,6 +43,37 @@ IDSL.FSA requires [**Fragmentation Spectra DataBase (FSDB)**](https://github.com
 
 	library(IDSL.FSA)
 	FSA_workflow("Address of the FSA parameter spreadsheet")
+
+## Quick Batch Example
+
+Follow these steps for a quick msp annotation of an ***.msp*** file
+
+1. Download [Kynurenine_Kynurenic_acid.msp](https://github.com/idslme/IDSL.FSA/blob/main/IDSL.FSA/inst/extdata/Kynurenine_Kynurenic_acid.msp)
+
+2. Download the positive mode [FSDB](https://zenodo.org/record/7530397#.Y8yAdkHMK71)
+
+3. IDSL.FSA requires parameters for three tabs for a full scale run. For this study, use default parameter values presented in the [FSA parameter spreadsheet](https://raw.githubusercontent.com/idslme/IDSL.FSA/main/FSA_parameters.xlsx). Then, provide information for 
+	
+	3.1. **FSA0002** for the *Address of the MS/MS library (FSDB) generated using `FSDB` tab*
+	
+	3.2. **FSA0003** for *Location of the INPUT sample of .msp and/or .mgf files*
+	
+	3.3. **FSA0004** for *Location to save OUTPUT results*
+		
+	3.4. You may also adjust the number of processing threads using **SPEC0001** in the `SpectraSimilarity` tab according to your computational power
+
+4. Run this command in the R/Rstudio console or terminal.
+
+```
+library(IDSL.FSA)
+FSA_workflow("Address of the FSA parameter spreadsheet")
+```
+
+5. You see the results in the address you provided for **FSA0004** including:
+
+	5.1. individual *SpectraAnnotationTable* for each ***.msp*** file in the *annotated_spectra_tables* directory in the *.Rdata* and *.csv* formats
+	
+	5.2. if you had selected an integer greater than 0 for **SPEC0019**, match spectra figures are also available in the *plot* for each MSP block.
 
 ## [**Wiki**](https://github.com/idslme/IDSL.FSA/wiki)
 
