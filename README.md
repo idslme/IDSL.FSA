@@ -24,14 +24,14 @@
 
 ## Features of IDSL.FSA
 
-1) Parameter selection through a well-described [parameter spreadsheet](https://raw.githubusercontent.com/idslme/IDSL.FSA/main/FSA_parameters.xlsx)
-2) Consistency with ***.msp*** and ***.mgf*** file formats
-3) Measuring matching variables including mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME)
-4) Spectra annotation regardless of presence of precursor values
-5) Spectra annotation using optional criteria including retention time and adduct type
-6) Generating batch spectra match figures
-7) Process high-throughput and population size studies
-8) Compatibility with parallel processing in Windows and Linux environments
+1) Parameter selection through a user-friendly and well-described [parameter spreadsheet](https://raw.githubusercontent.com/idslme/IDSL.FSA/main/FSA_parameters.xlsx)
+2) Analyzing population size untargeted studies (n > 500)
+3) Consistency with ***.msp*** and ***.mgf*** file formats
+4) Measuring matching variables including mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME)
+5) Spectra annotation regardless of presence of precursor values
+6) Spectra annotation using optional criteria including retention time and adduct type
+7) Generating batch spectra match figures
+8) Parallel processing in Windows and Linux environments
 
 ## Installation
 
@@ -48,7 +48,7 @@ IDSL.FSA requires [**Fragmentation Spectra DataBase (FSDB)**](https://github.com
 
 Follow these steps for a quick msp annotation of an ***.msp*** file
 
-1. Download [Kynurenine_Kynurenic_acid.msp](https://github.com/idslme/IDSL.FSA/blob/main/IDSL.FSA/inst/extdata/Kynurenine_Kynurenic_acid.msp)
+1. Download [Kynurenine_Kynurenic_acid.msp](https://github.com/idslme/IDSL.FSA/blob/main/IDSL.FSA/inst/extdata/Kynurenine_Kynurenic_acid.msp). You should also ensure this file ends up with an ***.msp*** extension after downloading. You may also need to rename this file to have an ***.msp*** extension.
 
 2. Download the positive mode [FSDB](https://zenodo.org/record/7530397#.Y8yAdkHMK71)
 
@@ -73,7 +73,7 @@ FSA_workflow("Address of the FSA parameter spreadsheet")
 
 	5.1. individual *SpectraAnnotationTable* for each ***.msp*** file in the *annotated_spectra_tables* directory in the *.Rdata* and *.csv* formats
 	
-	5.2. if you had selected an integer greater than 0 for **SPEC0019**, match spectra figures are also available in the *plot* for each MSP block.
+	5.2. if you had selected an integer greater than 0 for **SPEC0019**, match spectra figures are also available in the *plot* folder for each MSP block.
 
 ## [**Wiki**](https://github.com/idslme/IDSL.FSA/wiki)
 
