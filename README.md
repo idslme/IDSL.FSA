@@ -84,4 +84,4 @@ FSA_workflow("Address of the FSA parameter spreadsheet")
 
 ## Citation
 
-pending...
+[1] Fakouri Baygi, S., Kumar, Y. Barupal, D.K. [IDSL.CSA: Composite Spectra Analysis for Chemical Annotation of Untargeted Metabolomics Datasets](https://doi.org/10.1101/2023.02.09.527886). *bioRxiv*, **2023**.
