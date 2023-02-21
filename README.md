@@ -30,12 +30,17 @@
 4) Measuring matching variables including mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME)
 5) Spectra annotation regardless of presence of precursor values
 6) Spectra annotation using optional criteria including retention time and adduct type
-7) Generating batch spectra match figures
-8) Parallel processing in Windows and Linux environments
+7) Annotation using accurate or nominal mass values
+8) Generating batch spectra match figures
+9) Parallel processing in Windows and Linux environments
 
 ## Installation
 
 	install.packages("IDSL.FSA")
+	
+**Note:** In some instance, the [readxl](https://cran.r-project.org/package=readxl) R package is also required to read the [FSA parameter spreadsheet](https://raw.githubusercontent.com/idslme/IDSL.FSA/main/FSA_parameters.xlsx).
+
+	install.packages("readxl")
 
 ## Workflow
 
