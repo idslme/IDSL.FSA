@@ -7,14 +7,11 @@ FSA SpectraSimilarity xlsx Analyzer
 This function processes the spreadsheet of the `SpectraSimilarity` tab to ensure the parameter inputs are consistent with the requirements of the IDSL.FSA pipeline.
 }
 \usage{
-FSA_SpectraSimilarity_xlsxAnalyzer(spreadsheet, checkDataImportExport = TRUE)
+FSA_SpectraSimilarity_xlsxAnalyzer(spreadsheet)
 }
 \arguments{
   \item{spreadsheet}{
 FSA spreadsheet
-}
-  \item{checkDataImportExport}{
-check Data Import Export
 }
 }
 \value{
