@@ -104,7 +104,22 @@ FSA_msp2Cytoscape <- function(path, MSPfile = "", mspVariableVector = NULL, mspN
       ##
       osType <- Sys.info()[['sysname']]
       ##
-      if (osType == "Linux") {
+      if (osType == "Windows") {
+        ##
+        ########################################################################
+        ##
+        clust <- makeCluster(number_processing_threads)
+        clusterExport(clust, setdiff(ls(), c("clust")), envir = environment())
+        ##
+        cytoscape_df <- do.call(rbind, parLapply(clust, 1:(lengthFSdb - 1), function(i) {
+          call_cytoscape_df(i)
+        }))
+        ##
+        stopCluster(clust)
+        ##
+        ########################################################################
+        ##
+      } else {
         ##
         ########################################################################
         ##
@@ -116,20 +131,6 @@ FSA_msp2Cytoscape <- function(path, MSPfile = "", mspVariableVector = NULL, mspN
         ##
         closeAllConnections()
         ##
-      } else if (osType == "Windows") {
-        ##
-        clust <- makeCluster(number_processing_threads)
-        registerDoParallel(clust)
-        ##
-        ########################################################################
-        ##
-        cytoscape_df <- foreach(i = 1:(lengthFSdb - 1), .combine = 'rbind', .verbose = FALSE) %dopar% {
-          call_cytoscape_df(i)
-        }
-        ##
-        ########################################################################
-        ##
-        stopCluster(clust)
       }
     }
     ##

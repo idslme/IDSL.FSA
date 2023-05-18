@@ -5,7 +5,7 @@ spectral_entropy_calculator <- function(FragmentList, allowedWeightedSpectralEnt
   if (LxNon0 > 0) {
     FragmentList <- FragmentList[xNon0, ]
     if (LxNon0 == 1) {
-      FragmentList <- matrix(FragmentList, ncol = 2)
+      FragmentList <- matrix(FragmentList, nrow = 1)
     }
     ##
     FragmentList[, 2] <- FragmentList[, 2]/sum(FragmentList[, 2])

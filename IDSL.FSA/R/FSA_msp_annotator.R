@@ -6,7 +6,6 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
     ## To create log record for IDSL.FSA
     initiation_time <- Sys.time()
     timeZone <- tryCatch(Sys.timezone(), warning = function(w) {"UTC"}, error = function(e) {"UTC"})
-    FSA_opendir(output_path)
     FSA_logRecorder(paste0("MSP: ", address_input_msp))
     FSA_logRecorder(paste0("OUTPUT: ", output_path))
     FSA_logRecorder(paste0(rep("", 100), collapse = "-"))
@@ -28,7 +27,6 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
   ##
   output_path_spectra_tables <- paste0(output_path, "/annotated_spectra_tables")
   FSA_dir.create(output_path_spectra_tables, allowedUnlink = FALSE)
-  FSA_opendir(output_path_spectra_tables)
   NPT <- as.numeric(PARAM_SPEC[which(PARAM_SPEC[, 1] == 'SPEC0001'), 2])
   parallelizationMode <- tolower(PARAM_SPEC[which(PARAM_SPEC[, 1] == 'SPEC0002'), 2])
   ##
@@ -58,24 +56,24 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
   if (allowedNominalMass) {
     if (is.na(massErrorPrecursor)) {
       if (allowedVerbose) {FSA_logRecorder("NOTICE: Precursor m/z match (SPEC0005) was not selected for spectra annotations!",
-                                         allowedPrinting = FALSE)}
+                                           allowedPrinting = FALSE)}
     } else {
       if (allowedVerbose) {FSA_logRecorder("NOTICE: Precursor m/z match (SPEC0005) was selected for spectra annotations! Empty annotation tables will be generated when .msp files do not contain 'PrecursorMZ' information!",
-                                         allowedPrinting = FALSE)}
+                                           allowedPrinting = FALSE)}
     }
     ##
     roundingDigitPrefiltering <- 0
     massError <- 0
-    maxNEME <- 0
+    maxNEME <- Inf
     ##
   } else {
     ##
     if (is.na(massErrorPrecursor)) {
       if (allowedVerbose) {FSA_logRecorder("NOTICE: Precursor m/z match (SPEC0005) was not selected for spectra annotations!",
-                                         allowedPrinting = FALSE)}
+                                           allowedPrinting = FALSE)}
     } else {
       if (allowedVerbose) {FSA_logRecorder(paste0("NOTICE: Mass accuracy = '" , massErrorPrecursor, " Da' for precursor m/z (SPEC0005) was selected for spectra annotations! Empty annotation tables will be generated when .msp files do not contain 'PrecursorMZ' information!"),
-                                         allowedPrinting = FALSE)}
+                                           allowedPrinting = FALSE)}
     }
     ##
     roundingDigitPrefiltering <- as.numeric(PARAM_SPEC[which(PARAM_SPEC[, 1] == 'SPEC0011'), 2])
@@ -85,10 +83,10 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
   ##
   if (is.na(RTtolerance)) {
     if (allowedVerbose) {FSA_logRecorder("NOTICE: Retention time tolerance (SPEC0006) was not selected and retention time values will not be used for spectra annotations!",
-                                       allowedPrinting = FALSE)}
+                                         allowedPrinting = FALSE)}
   } else {
     if (allowedVerbose) {FSA_logRecorder(paste0("NOTICE: Retention time tolerance = '" , RTtolerance, " min' (SPEC0006) was selected for spectra annotations! Empty annotation tables will be generated when .msp files do not contain 'Retention Time' information!"),
-                                       allowedPrinting = FALSE)}
+                                         allowedPrinting = FALSE)}
   }
   ##
   allowedWeightedSpectralEntropy <- eval(parse(text = (PARAM_SPEC[which(PARAM_SPEC[, 1] == 'SPEC0013'), 2])))
@@ -107,7 +105,6 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
     exportSpectraCheck <- TRUE
     outputMSMSspectra <- paste0(output_path, "/plot")
     FSA_dir.create(outputMSMSspectra, allowedUnlink = FALSE)
-    FSA_opendir(outputMSMSspectra)
     if (allowedVerbose) {FSA_logRecorder("FSA spectra comparison plots with the FSDB library are stored in the `plot` folder!")}
     ##
     SpectraDevice <- tolower(gsub(" ", "", PARAM_SPEC[which(PARAM_SPEC[, 1] == 'SPEC0020'), 2]))
@@ -129,17 +126,18 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
   if (allowedVerbose) {
     if ((FSdbMassIntegrationWindow != massError) | (FSdbAllowedMergeNominalMass != allowedNominalMass) | (FSdbWeightedSpectralEntropyMode != allowedWeightedSpectralEntropy) | (FSdbNoiseRemovalRatio != noiseRemovalRatio)) {
       FSA_logRecorder("WARNING!!! Parameters used to generate FSDB shown below are different from the search parameters!!!")
-      FSA_logRecorder(detailsFSdb)
+      FSA_logRecorder(paste0(names(detailsFSdb), collapse = "\t"))
+      FSA_logRecorder(paste0("\t", paste0(detailsFSdb, collapse = "\t\t\t")))
     }
   }
   ##############################################################################
   ########################## Spectra marker generator ##########################
   ##
-  if (allowedVerbose) {FSA_logRecorder("Initiated aggregating spectra markers from the FSDB for `.msp` prefiltering!")}
+  if (allowedVerbose) {FSA_logRecorder("Initiated selecting spectra markers from the FSDB for the spectra prefiltering step!")}
   ##
   libFSdbIDlist <- FSA_spectra_marker_generator(libFSdb, ratio2basePeak4nSpectraMarkers, aggregationLevel = roundingDigitPrefiltering)
   ##
-  if (allowedVerbose) {FSA_logRecorder("Completed aggregating spectra markers!")}
+  if (allowedVerbose) {FSA_logRecorder("Completed selecting spectra markers!")}
   ##############################################################################
   ##
   if (allowedVerbose) {FSA_logRecorder("Initiated spectra annotation on individual `.msp` files!")}
@@ -148,11 +146,7 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
   ##############################################################################
   ##############################################################################
   ##
-  call_msp_annotator <- function(address_input_msp, iFileNameMSP, exportSpectraCheck, exportSpectraParameters, outputMSMSspectra,
-                                 output_path_spectra_tables, libFSdb, libFSdbIDlist, targetedPrecursorType, ratio2basePeak4nSpectraMarkers,
-                                 allowedNominalMass, allowedWeightedSpectralEntropy, noiseRemovalRatio, roundingDigitPrefiltering,
-                                 minMatchedNumPeaks, massError, maxNEME, minIonRangeDifference, minCosineSimilarity, minEntropySimilarity,
-                                 minRatioMatchedNspectraMarkers, spectralEntropyDeviationPrefiltering, massErrorPrecursor, RTtolerance, NPT) {
+  call_msp_annotator <- function(iFileNameMSP) {
     ##
     if (exportSpectraCheck) {
       exportSpectraParameters[3] <- iFileNameMSP
@@ -184,14 +178,10 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
       progressBARboundaries <- txtProgressBar(min = 0, max = L_MSP, initial = 0, style = 3)
     }
     ##
-    for (i in file_name_sample_msp) {
+    for (iFileNameMSP in file_name_sample_msp) {
       ##
-      null_variable <- tryCatch(call_msp_annotator(address_input_msp, iFileNameMSP = i, exportSpectraCheck, exportSpectraParameters, outputMSMSspectra,
-                                                   output_path_spectra_tables, libFSdb, libFSdbIDlist, targetedPrecursorType, ratio2basePeak4nSpectraMarkers,
-                                                   allowedNominalMass, allowedWeightedSpectralEntropy, noiseRemovalRatio, roundingDigitPrefiltering,
-                                                   minMatchedNumPeaks, massError, maxNEME, minIonRangeDifference, minCosineSimilarity, minEntropySimilarity,
-                                                   minRatioMatchedNspectraMarkers, spectralEntropyDeviationPrefiltering, massErrorPrecursor, RTtolerance, NPT),
-                                error = function(e) {FSA_logRecorder(paste0("Problem with `", i,"`!"))})
+      null_variable <- tryCatch(call_msp_annotator(iFileNameMSP),
+                                error = function(e) {FSA_logRecorder(paste0("Problem with `", iFileNameMSP,"`!"))})
       ##
       if (allowedVerbose) {
         iCounter <- iCounter + 1
@@ -206,36 +196,31 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
     ##
     osType <- Sys.info()[['sysname']]
     ##
-    if (osType == "Linux") {
+    if (osType == "Windows") {
       ##
-      null_variable <- mclapply(file_name_sample_msp, function(i) {
+      clust <- makeCluster(NPT0)
+      clusterExport(clust, setdiff(ls(), c("clust", "file_name_sample_msp")), envir = environment())
+      ##
+      null_variable <- parLapply(clust, file_name_sample_msp, function(iFileNameMSP) {
         ##
-        tryCatch(call_msp_annotator(address_input_msp, iFileNameMSP = i, exportSpectraCheck, exportSpectraParameters, outputMSMSspectra,
-                                    output_path_spectra_tables, libFSdb, libFSdbIDlist, targetedPrecursorType, ratio2basePeak4nSpectraMarkers,
-                                    allowedNominalMass, allowedWeightedSpectralEntropy, noiseRemovalRatio, roundingDigitPrefiltering,
-                                    minMatchedNumPeaks, massError, maxNEME, minIonRangeDifference, minCosineSimilarity, minEntropySimilarity,
-                                    minRatioMatchedNspectraMarkers, spectralEntropyDeviationPrefiltering, massErrorPrecursor, RTtolerance, NPT),
-                 error = function(e) {FSA_logRecorder(paste0("Problem with `", i,"`!"))})
+        tryCatch(call_msp_annotator(iFileNameMSP),
+                 error = function(e) {FSA_logRecorder(paste0("Problem with `", iFileNameMSP,"`!"))})
+      })
+      ##
+      stopCluster(clust)
+      ##
+      ##########################################################################
+      ##
+    } else {
+      ##
+      null_variable <- mclapply(file_name_sample_msp, function(iFileNameMSP) {
+        ##
+        tryCatch(call_msp_annotator(iFileNameMSP),
+                 error = function(e) {FSA_logRecorder(paste0("Problem with `", iFileNameMSP,"`!"))})
       }, mc.cores = NPT0)
       ##
       closeAllConnections()
       ##
-    } else if (osType == "Windows") {
-      ##
-      clust <- makeCluster(NPT0)
-      registerDoParallel(clust)
-      ##
-      null_variable <- foreach(i = file_name_sample_msp, .verbose = FALSE) %dopar% {
-        ##
-        tryCatch(call_msp_annotator(address_input_msp, iFileNameMSP = i, exportSpectraCheck, exportSpectraParameters, outputMSMSspectra,
-                                    output_path_spectra_tables, libFSdb, libFSdbIDlist, targetedPrecursorType, ratio2basePeak4nSpectraMarkers,
-                                    allowedNominalMass, allowedWeightedSpectralEntropy, noiseRemovalRatio, roundingDigitPrefiltering,
-                                    minMatchedNumPeaks, massError, maxNEME, minIonRangeDifference, minCosineSimilarity, minEntropySimilarity,
-                                    minRatioMatchedNspectraMarkers, spectralEntropyDeviationPrefiltering, massErrorPrecursor, RTtolerance, NPT),
-                 error = function(e) {FSA_logRecorder(paste0("Problem with `", i,"`!"))})
-      }
-      ##
-      stopCluster(clust)
     }
   }
   if (allowedVerbose) {

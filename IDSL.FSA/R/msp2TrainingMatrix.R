@@ -1,4 +1,4 @@
-msp2TrainingMatrix <- function(path, MSPfile = "", minDetectionFreq = 100, selectedFSdbIDs = NULL, dimension = "wide",
+msp2TrainingMatrix <- function(path, MSPfile = "", minDetectionFreq = 1, selectedFSdbIDs = NULL, dimension = "wide",
                                massAccuracy = 0.01, allowedNominalMass = FALSE, allowedWeightedSpectralEntropy = TRUE,
                                noiseRemovalRatio = 0.01, number_processing_threads = 1) {
   ##
@@ -141,7 +141,19 @@ msp2TrainingMatrix <- function(path, MSPfile = "", minDetectionFreq = 100, selec
     ##
     ############################################################################
     ##
-    if (osType == "Linux") {
+    if (osType == "Windows") {
+      clust <- makeCluster(number_processing_threads)
+      clusterExport(clust, setdiff(ls(), c("clust", "LxDiffMZ")), envir = environment())
+      ##
+      listSeedMZfragments <- parLapply(clust, 1:LxDiffMZ, function(i) {
+        call_msp2alignedSpectraMatrix(i)
+      })
+      ##
+      stopCluster(clust)
+      ##
+      ##########################################################################
+      ##
+    } else {
       ##
       listSeedMZfragments <- mclapply(1:LxDiffMZ, function(i) {
         call_msp2alignedSpectraMatrix(i)
@@ -150,16 +162,6 @@ msp2TrainingMatrix <- function(path, MSPfile = "", minDetectionFreq = 100, selec
       closeAllConnections()
       ##
       ##########################################################################
-      ##
-    } else if (osType == "Windows") {
-      clust <- makeCluster(number_processing_threads)
-      registerDoParallel(clust)
-      ##
-      listSeedMZfragments <- foreach(i = 1:LxDiffMZ, .verbose = FALSE) %dopar% {
-        call_msp2alignedSpectraMatrix(i)
-      }
-      ##
-      stopCluster(clust)
       ##
     }
   }
@@ -184,7 +186,7 @@ msp2TrainingMatrix <- function(path, MSPfile = "", minDetectionFreq = 100, selec
         ##
         idSeedMZfragments[seq((xDiffMZ[i] + 1), xDiffMZ[i + 1], 1)] <- sbIdSeedMZfragments
         ##
-        counterSeedMZ <- max(sbIdSeedMZfragments) - 1
+        counterSeedMZ <- max(sbIdSeedMZfragments)
       }
       setTxtProgressBar(progressBARboundaries, i)
     }
@@ -216,7 +218,8 @@ msp2TrainingMatrix <- function(path, MSPfile = "", minDetectionFreq = 100, selec
       xDiff <- c(0, which(diff(mainImzInt[, 1]) > 0), nrow(mainImzInt))
       LxDiff <- length(xDiff) - 1
       ##
-      headerRowSeedMZfragments <- paste0("spectraID,", paste0(seedMZfragments, collapse = ","))
+      orderSeedMZfragments <- order(seedMZfragments, decreasing = FALSE)
+      headerRowSeedMZfragments <- paste0("spectraID,", paste0(seedMZfragments[orderSeedMZfragments], collapse = ","))
       ##
       write(headerRowSeedMZfragments, file = alignedMSPcsvFile, append = FALSE, sep = "\n")
       ##
@@ -226,7 +229,7 @@ msp2TrainingMatrix <- function(path, MSPfile = "", minDetectionFreq = 100, selec
         fragIDi <- rep("", nSeedMZfragments)
         fragIDi[mainImzInt[xID, 4]] <- as.character(mainImzInt[xID, 3])
         ##
-        fragIDi <- paste0(mainImzInt[xID[1], 1], ",", paste0(fragIDi, collapse = ","))
+        fragIDi <- paste0(mainImzInt[xID[1], 1], ",", paste0(fragIDi[orderSeedMZfragments], collapse = ","))
         ##
         write(fragIDi, file = alignedMSPcsvFile, append = TRUE, sep = "\n")
         ##

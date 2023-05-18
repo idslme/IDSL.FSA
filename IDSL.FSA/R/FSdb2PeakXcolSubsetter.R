@@ -50,7 +50,19 @@ FSdb2PeakXcolSubsetter <- function(FSdb_address, peak_alignment_folder, metavari
       ##
       ##########################################################################
       ##
-      if (osType == "Linux") {
+      if (osType == "Windows") {
+        clust <- makeCluster(number_processing_threads)
+        clusterExport(clust, setdiff(ls(), c("clust", "uniqueFileNameHRMS")), envir = environment())
+        ##
+        subsetAlignedPeakIDs <- do.call(c, parLapply(clust, uniqueFileNameHRMS, function(i) {
+          call_FSdb2PeakXcolSubsetter(i)
+        }))
+        ##
+        stopCluster(clust)
+        ##
+        ########################################################################
+        ##
+      } else {
         ##
         subsetAlignedPeakIDs <- do.call(c, mclapply(uniqueFileNameHRMS, function(i) {
           call_FSdb2PeakXcolSubsetter(i)
@@ -59,16 +71,6 @@ FSdb2PeakXcolSubsetter <- function(FSdb_address, peak_alignment_folder, metavari
         closeAllConnections()
         ##
         ########################################################################
-        ##
-      } else if (osType == "Windows") {
-        clust <- makeCluster(number_processing_threads)
-        registerDoParallel(clust)
-        ##
-        subsetAlignedPeakIDs <- foreach(i = uniqueFileNameHRMS, .combine = 'c', .verbose = FALSE) %dopar% {
-          call_FSdb2PeakXcolSubsetter(i)
-        }
-        ##
-        stopCluster(clust)
         ##
       }
     }

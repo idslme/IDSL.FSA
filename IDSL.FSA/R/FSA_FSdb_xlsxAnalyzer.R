@@ -17,6 +17,13 @@ FSA_FSdb_xlsxAnalyzer <- function(spreadsheet) {
   } else if (length(spreadsheet) == 1) {
     if (typeof(spreadsheet) == "character") {
       if (file.exists(spreadsheet)) {
+        ##
+        readxlPackageCheck <- tryCatch(requireNamespace('readxl', quietly = TRUE), error = function(e) {FALSE})
+        if (!readxlPackageCheck) {
+          warning("IDSL.FSA requires the 'readxl' package of R to read Excel spreadsheets!")
+          stop(" <<< install.packages('readxl') >>> ")
+        }
+        ##
         PARAM_FSdb <- readxl::read_xlsx(spreadsheet, sheet = "FSDB")
         PARAM_FSdb <- cbind(PARAM_FSdb[, 2], PARAM_FSdb[, 4])
         checkpoint_parameter <- TRUE
@@ -29,6 +36,7 @@ FSA_FSdb_xlsxAnalyzer <- function(spreadsheet) {
   } else {
     FSA_message("The `FSDB` spreadsheet tab was not produced properly!")
   }
+  ##############################################################################
   if (checkpoint_parameter) {
     ################### MS/MS library import and export ########################
     x0001 <- which(PARAM_FSdb[, 1] == 'FSdb0001')

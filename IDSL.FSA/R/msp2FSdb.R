@@ -269,222 +269,167 @@ msp2FSdb <- function(path, MSPfile_vector = "", massIntegrationWindow = 0, allow
   }
   ##
   ##############################################################################
+  ##
   if (number_processing_threads == 1) {
     ##
     ListMSPfile <- lapply(1:L_msp, function(i) {
       ListMSPfile_call(i)
     })
     ##
-    MSPfile <- do.call(c, lapply(1:L_msp, function(i) {
-      ListMSPfile[[i]][[1]]
-    }))
+  } else {
     ##
-    mspLibName <- do.call(c, lapply(1:L_msp, function(i) {
-      ListMSPfile[[i]][[2]]
-    }))
-    ##
-    headers <- do.call(c, lapply(1:L_msp, function(i) {
-      ListMSPfile[[i]][[3]]
-    }))
-    ##
-    ListMSPfile <- NULL
-    ######################### Ancillary parameters #############################
-    headers <- tolower(headers)
-    headers <- unique(headers)
-    headers <- sort(headers)
-    Lheaders <- length(headers)
     ############################################################################
-    x_msp <- which((MSPfile == "") | (MSPfile == " ") | (MSPfile == "  ") | (MSPfile == "\t"))
-    xdiff <- which(diff(x_msp) > 1)
-    x1msp <- x_msp[xdiff] + 1
-    x2msp <- x_msp[xdiff + 1] - 1
+    ##
+    osType <- Sys.info()[['sysname']]
+    ##
+    if (osType == "Windows") {
+      ##
+      ##########################################################################
+      ####
+      clust <- makeCluster(number_processing_threads)
+      clusterExport(clust, setdiff(ls(), c("clust", "L_msp")), envir = environment())
+      ##
+      ListMSPfile <- parLapply(clust, 1:L_msp, function(i) {
+        ListMSPfile_call(i)
+      })
+      ##
+      stopCluster(clust)
+      ##
+      ##########################################################################
+      ##
+    } else {
+      ##
+      ListMSPfile <- mclapply(1:L_msp, function(i) {
+        ListMSPfile_call(i)
+      }, mc.cores = number_processing_threads)
+      ##
+      closeAllConnections()
+      ##
+      ##########################################################################
+      ##
+    }
+  }
+  ##
+  ##############################################################################
+  ##############################################################################
+  ##
+  MSPfile <- do.call(c, lapply(1:L_msp, function(i) {
+    ListMSPfile[[i]][[1]]
+  }))
+  ##
+  mspLibName <- do.call(c, lapply(1:L_msp, function(i) {
+    ListMSPfile[[i]][[2]]
+  }))
+  ##
+  headers <- do.call(c, lapply(1:L_msp, function(i) {
+    ListMSPfile[[i]][[3]]
+  }))
+  ##
+  ListMSPfile <- NULL
+  ########################## Ancillary parameters ##############################
+  headers <- tolower(headers)
+  headers <- unique(headers)
+  headers <- sort(headers)
+  Lheaders <- length(headers)
+  ##############################################################################
+  x_msp <- which((MSPfile == "") | (MSPfile == " ") | (MSPfile == "  ") | (MSPfile == "\t"))
+  xdiff <- which(diff(x_msp) > 1)
+  x1msp <- x_msp[xdiff] + 1
+  x2msp <- x_msp[xdiff + 1] - 1
+  ##
+  ##############################################################################
+  ##############################################################################
+  ##
+  if (number_processing_threads == 1) {
     ##
     mspList <- lapply(1:length(xdiff), function(i) {
       mspList_call(i)
     })
     ##
     MSPfile <- NULL
-    ############################################################################
-    lengthMSPbolcks <- do.call(c, lapply(1:length(mspList), function(i) {
-      length(mspList[[i]])
+    ##
+    lengthMSPbolcks <- do.call(c, lapply(mspList, function(i) {
+      length(i)
     }))
     ##
-    xNonNull <- which(lengthMSPbolcks > 0)
-    ############################################################################
-    NumPeaks_PrecursorMZ_SpectralEntropy <- do.call(rbind, lapply(xNonNull, function(i) {
-      mspL <- mspList[[i]]
-      do.call(rbind, lapply(1:lengthMSPbolcks[i], function(j) {
-        c(mspL[[j]]$NP_list, mspL[[j]]$PMZ_list, mspL[[j]]$SE_list)
-      }))
-    }))
-    ##
-    NumPeaks <- NumPeaks_PrecursorMZ_SpectralEntropy[, 1]
-    PrecursorMZ <- NumPeaks_PrecursorMZ_SpectralEntropy[, 2]
-    spectralEntropyVector <- NumPeaks_PrecursorMZ_SpectralEntropy[, 3]
-    NumPeaks_PrecursorMZ_SpectralEntropy <- NULL
-    ##
-    FragmentList <- unlist(lapply(xNonNull, function(i) {
-      mspL <- mspList[[i]]
-      lapply(1:lengthMSPbolcks[i], function(j) {
-        mspL[[j]]$FL_list
-      })
-    }), recursive = FALSE)
-    ##
-    mspAncillaryParameters <- do.call(rbind, lapply(xNonNull, function(i) {
-      mspL <- mspList[[i]]
-      do.call(rbind, lapply(1:lengthMSPbolcks[i], function(j) {
-        mspL[[j]]$AnP_list
-      }))
-    }))
-    ############################################################################
   } else {
     ##
-    osType <- Sys.info()[['sysname']]
+    ############################################################################
     ##
-    if (osType == "Linux") {
+    if (osType == "Windows") {
       ##
-      ListMSPfile <- mclapply(1:L_msp, function(i) {
-        ListMSPfile_call(i)
-      }, mc.cores = number_processing_threads)
-      ##
-      MSPfile <- do.call(c, mclapply(1:L_msp, function(i) {
-        ListMSPfile[[i]][[1]]
-      }, mc.cores = number_processing_threads))
-      ##
-      mspLibName <- do.call(c, mclapply(1:L_msp, function(i) {
-        ListMSPfile[[i]][[2]]
-      }, mc.cores = number_processing_threads))
-      ##
-      headers <- do.call(c, mclapply(1:L_msp, function(i) {
-        ListMSPfile[[i]][[3]]
-      }, mc.cores = number_processing_threads))
-      ##
-      ListMSPfile <- NULL
-      ######################## Ancillary parameters ############################
-      headers <- tolower(headers)
-      headers <- unique(headers)
-      headers <- sort(headers)
-      Lheaders <- length(headers)
       ##########################################################################
-      x_msp <- which((MSPfile == "") | (MSPfile == " ") | (MSPfile == "  ") | (MSPfile == "\t"))
-      xdiff <- which(diff(x_msp) > 1)
-      x1msp <- x_msp[xdiff] + 1
-      x2msp <- x_msp[xdiff + 1] - 1
+      ####
+      clust <- makeCluster(number_processing_threads)
+      clusterExport(clust, setdiff(ls(), c("clust")), envir = environment())
+      ##
+      mspList <- parLapply(clust, 1:length(xdiff), function(i) {
+        mspList_call(i)
+      })
+      stopCluster(clust)
+      ####
+      MSPfile <- NULL
+      ##
+      clust <- makeCluster(number_processing_threads)
+      clusterExport(clust, NULL, envir = environment())
+      ##
+      lengthMSPbolcks <- do.call(c, parLapply(clust, mspList, function(i) {
+        length(i)
+      }))
+      ##
+      stopCluster(clust)
+      ##
+      ##########################################################################
+      ##
+    } else {
       ##
       mspList <- mclapply(1:length(xdiff), function(i) {
         mspList_call(i)
       }, mc.cores = number_processing_threads)
       ##
       MSPfile <- NULL
-      ##########################################################################
-      lengthMSPbolcks <- do.call(c, mclapply(1:length(mspList), function(i) {
-        length(mspList[[i]])
-      }, mc.cores = number_processing_threads))
       ##
-      xNonNull <- which(lengthMSPbolcks > 0)
-      ##########################################################################
-      NumPeaks_PrecursorMZ_SpectralEntropy <- do.call(rbind, mclapply(xNonNull, function(i) {
-        mspL <- mspList[[i]]
-        do.call(rbind, lapply(1:lengthMSPbolcks[i], function(j) {
-          c(mspL[[j]]$NP_list, mspL[[j]]$PMZ_list, mspL[[j]]$SE_list)
-        }))
-      }, mc.cores = number_processing_threads))
-      ##
-      NumPeaks <- NumPeaks_PrecursorMZ_SpectralEntropy[, 1]
-      PrecursorMZ <- NumPeaks_PrecursorMZ_SpectralEntropy[, 2]
-      spectralEntropyVector <- NumPeaks_PrecursorMZ_SpectralEntropy[, 3]
-      NumPeaks_PrecursorMZ_SpectralEntropy <- NULL
-      ##
-      FragmentList <- unlist(mclapply(xNonNull, function(i) {
-        mspL <- mspList[[i]]
-        lapply(1:lengthMSPbolcks[i], function(j) {
-          mspL[[j]]$FL_list
-        })
-      }, mc.cores = number_processing_threads), recursive = FALSE)
-      ##
-      mspAncillaryParameters <- do.call(rbind, mclapply(xNonNull, function(i) {
-        mspL <- mspList[[i]]
-        do.call(rbind, lapply(1:lengthMSPbolcks[i], function(j) {
-          mspL[[j]]$AnP_list
-        }))
+      lengthMSPbolcks <- do.call(c, mclapply(mspList, function(i) {
+        length(i)
       }, mc.cores = number_processing_threads))
       ##
       closeAllConnections()
       ##
-    } else if (osType == "Windows") {
       ##########################################################################
-      clust <- makeCluster(number_processing_threads)
-      registerDoParallel(clust)
       ##
-      ListMSPfile <- foreach(i = 1:L_msp, .verbose = FALSE) %dopar% {
-        ListMSPfile_call(i)
-      }
-      ##
-      MSPfile <- foreach(i = 1:L_msp, .combine = 'c', .verbose = FALSE) %dopar% {
-        ListMSPfile[[i]][[1]]
-      }
-      ##
-      mspLibName <- foreach(i = 1:L_msp, .combine = 'c', .verbose = FALSE) %dopar% {
-        ListMSPfile[[i]][[2]]
-      }
-      ##
-      headers <- foreach(i = 1:L_msp, .combine = 'c', .verbose = FALSE) %dopar% {
-        ListMSPfile[[i]][[3]]
-      }
-      ##
-      ListMSPfile <- NULL
-      ######################## Ancillary parameters ############################
-      headers <- tolower(headers)
-      headers <- unique(headers)
-      headers <- sort(headers)
-      Lheaders <- length(headers)
-      ##########################################################################
-      x_msp <- which((MSPfile == "") | (MSPfile == " ") | (MSPfile == "  ") | (MSPfile == "\t"))
-      xdiff <- which(diff(x_msp) > 1)
-      x1msp <- x_msp[xdiff] + 1
-      x2msp <- x_msp[xdiff + 1] - 1
-      ##
-      mspList <- foreach(i = 1:length(xdiff), .verbose = FALSE) %dopar% {
-        mspList_call(i)
-      }
-      ##
-      MSPfile <- NULL
-      ##########################################################################
-      lengthMSPbolcks <- foreach(i = 1:length(mspList), .combine = 'c', .verbose = FALSE) %dopar% {
-        length(mspList[[i]])
-      }
-      ##
-      xNonNull <- which(lengthMSPbolcks > 0)
-      ##########################################################################
-      NumPeaks_PrecursorMZ_SpectralEntropy <- foreach(i = xNonNull, .combine = 'rbind', .verbose = FALSE) %dopar% {
-        mspL <- mspList[[i]]
-        do.call(rbind, lapply(1:lengthMSPbolcks[i], function(j) {
-          c(mspL[[j]]$NP_list, mspL[[j]]$PMZ_list, mspL[[j]]$SE_list)
-        }))
-      }
-      ##
-      NumPeaks <- NumPeaks_PrecursorMZ_SpectralEntropy[, 1]
-      PrecursorMZ <- NumPeaks_PrecursorMZ_SpectralEntropy[, 2]
-      spectralEntropyVector <- NumPeaks_PrecursorMZ_SpectralEntropy[, 3]
-      NumPeaks_PrecursorMZ_SpectralEntropy <- NULL
-      ##
-      FragmentList <- unlist(foreach(i = xNonNull, .verbose = FALSE) %dopar% {
-        mspL <- mspList[[i]]
-        lapply(1:lengthMSPbolcks[i], function(j) {
-          mspL[[j]]$FL_list
-        })
-      }, recursive = FALSE)
-      ##
-      mspAncillaryParameters <- foreach(i = xNonNull, .combine = 'rbind', .verbose = FALSE) %dopar% {
-        mspL <- mspList[[i]]
-        do.call(rbind, lapply(1:lengthMSPbolcks[i], function(j) {
-          mspL[[j]]$AnP_list
-        }))
-      }
-      ##
-      stopCluster(clust)
     }
   }
+  ##
+  ##############################################################################
+  ##############################################################################
+  ##
+  xNonNull <- which(lengthMSPbolcks > 0)
+  ##
+  NumPeaks_PrecursorMZ_SpectralEntropy <- do.call(rbind, lapply(xNonNull, function(i) {
+    mspL <- mspList[[i]]
+    do.call(rbind, lapply(1:lengthMSPbolcks[i], function(j) {
+      c(mspL[[j]]$NP_list, mspL[[j]]$PMZ_list, mspL[[j]]$SE_list)
+    }))
+  }))
+  ##
+  NumPeaks <- NumPeaks_PrecursorMZ_SpectralEntropy[, 1]
+  PrecursorMZ <- NumPeaks_PrecursorMZ_SpectralEntropy[, 2]
+  spectralEntropyVector <- NumPeaks_PrecursorMZ_SpectralEntropy[, 3]
+  NumPeaks_PrecursorMZ_SpectralEntropy <- NULL
+  ##
+  FragmentList <- unlist(lapply(xNonNull, function(i) {
+    mspL <- mspList[[i]]
+    lapply(1:lengthMSPbolcks[i], function(j) {
+      mspL[[j]]$FL_list
+    })
+  }), recursive = FALSE)
+  ##
+  mspAncillaryParameters <- do.call(rbind, lapply(xNonNull, function(i) {
+    mspL <- mspList[[i]]
+    do.call(rbind, lapply(1:lengthMSPbolcks[i], function(j) {
+      mspL[[j]]$AnP_list
+    }))
+  }))
   ##
   mspList <- NULL
   ##############################################################################
@@ -500,7 +445,8 @@ msp2FSdb <- function(path, MSPfile_vector = "", massIntegrationWindow = 0, allow
                         c("collision_energy", "collisionenergy", "ce", "energy"),
                         c("instrument_type", "instrumenttype"),
                         c("ion_mode", "ionmode"),
-                        c("exact_mass", "exactmass"))
+                        c("exact_mass", "exactmass"),
+                        c("smiles", "computed_smiles"))
   ##
   ##############################################################################
   ##
@@ -591,7 +537,7 @@ msp2FSdb <- function(path, MSPfile_vector = "", massIntegrationWindow = 0, allow
   ##############################################################################
   ## To correct meta-variables with space characters
   ## meta-variables in the `metaVar0Space` array all should be in lowercase!!!
-  metaVar0Space <- c("inchikey", "smiles", "formula", "isotope", "ion_mode")
+  metaVar0Space <- c("inchikey", "inchi", "smiles", "formula", "isotope", "ion_mode")
   ##
   for (i in metaVar0Space) {
     x_metaVar <- which(headers == i)

@@ -1,6 +1,7 @@
 FSA_logRecorder <- function(messageQuote, allowedPrinting = TRUE) {
   if (allowedPrinting) {
-    cat(paste0("\n", messageQuote))
+    col <- 96
+    message(paste0("\033[0;", col, "m", messageQuote, "\033[0m"))
   }
   ##
   if (exists('.logFSA')) {

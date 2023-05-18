@@ -14,10 +14,10 @@ number_processing_threads = 1)
   \item{path}{
 address of .msp file(s)
 }
-\item{FSdbFileName}{
+  \item{FSdbFileName}{
 name of the FSDB library name including `.Rdata` extension
 }
-\item{UnweightMSP}{
+  \item{UnweightMSP}{
 to unweight fragmentation patterns
 }
   \item{number_processing_threads}{

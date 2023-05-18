@@ -87,16 +87,63 @@ FSdb2msp <- function(path, FSdbFileName = "", UnweightMSP = FALSE, number_proces
       }))
       ##
       FragmentList <- lapply(1:LNumPeaks, function(i) {
-        S_FragmentList[[i]][[3]]
+        S_FragmentList[[i]][[2]]
       })
     }
     ##
     MSP <- do.call(c, lapply(1:LNumPeaks, function(i) {
       call_MSP(i)
     }))
+    ##
+    ############################################################################
+    ##
   } else {
+    ##
     osType <- Sys.info()[['sysname']]
-    if (osType == "Linux") {
+    if (osType == "Windows") {
+      ##
+      if (UnweightMSP) {
+        ####
+        clust <- makeCluster(number_processing_threads)
+        clusterExport(clust, setdiff(ls(), c("clust", "LNumPeaks")), envir = environment())
+        ##
+        S_FragmentList <- parLapply(clust, 1:LNumPeaks, function(i) {
+          call_S_FragmentList(i)
+        })
+        ##
+        stopCluster(clust)
+        ####
+        clust <- makeCluster(number_processing_threads)
+        clusterExport(clust, c("S_FragmentList"), envir = environment())
+        ##
+        SpectralEntropy <- do.call(c, parLapply(clust, 1:LNumPeaks, function(i) {
+          S_FragmentList[[i]][[1]]
+        }))
+        ##
+        stopCluster(clust)
+        ####
+        clust <- makeCluster(number_processing_threads)
+        clusterExport(clust, c("S_FragmentList"), envir = environment())
+        ##
+        FragmentList <- parLapply(clust, 1:LNumPeaks, function(i) {
+          S_FragmentList[[i]][[2]]
+        })
+        ##
+        stopCluster(clust)
+      }
+      ####
+      clust <- makeCluster(number_processing_threads)
+      clusterExport(clust, setdiff(ls(), c("clust", "LNumPeaks")), envir = environment())
+      ##
+      MSP <- do.call(c, parLapply(clust, 1:LNumPeaks, function(i) {
+        call_MSP(i)
+      }))
+      ##
+      stopCluster(clust)
+      ##
+      ##########################################################################
+      ##
+    } else {
       if (UnweightMSP) {
         S_FragmentList <- mclapply(1:LNumPeaks, function(i) {
           call_S_FragmentList(i)
@@ -106,8 +153,8 @@ FSdb2msp <- function(path, FSdbFileName = "", UnweightMSP = FALSE, number_proces
           S_FragmentList[[i]][[1]]
         }, mc.cores = number_processing_threads))
         ##
-        FragmentList <- lapply(1:LNumPeaks, function(i) {
-          S_FragmentList[[i]][[3]]
+        FragmentList <- mclapply(1:LNumPeaks, function(i) {
+          S_FragmentList[[i]][[2]]
         }, mc.cores = number_processing_threads)
       }
       ##
@@ -117,30 +164,6 @@ FSdb2msp <- function(path, FSdbFileName = "", UnweightMSP = FALSE, number_proces
       ##
       closeAllConnections()
       ##
-    } else if (osType == "Windows") {
-      ##
-      clust <- makeCluster(number_processing_threads)
-      registerDoParallel(clust)
-      ##
-      if (UnweightMSP) {
-        S_FragmentList <- foreach(i = 1:LNumPeaks, .verbose = FALSE) %dopar% {
-          call_S_FragmentList(i)
-        }
-        ##
-        SpectralEntropy <- foreach(i = 1:LNumPeaks, .combine = 'c', .verbose = FALSE) %dopar% {
-          S_FragmentList[[i]][[1]]
-        }
-        ##
-        FragmentList <- foreach(i = 1:LNumPeaks, .verbose = FALSE) %dopar% {
-          S_FragmentList[[i]][[3]]
-        }
-      }
-      ##
-      MSP <- foreach(i = 1:LNumPeaks, .combine = 'c', .verbose = FALSE) %dopar% {
-        call_MSP(i)
-      }
-      ##
-      stopCluster(clust)
     }
   }
   ##

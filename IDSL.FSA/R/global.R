@@ -1,1 +1,1 @@
-utils::globalVariables(c("i", ".logFSA"))
+utils::globalVariables(c(".logFSA"))

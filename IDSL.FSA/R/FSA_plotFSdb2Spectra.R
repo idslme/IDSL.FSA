@@ -46,7 +46,20 @@ FSA_plotFSdb2Spectra <- function(path, allowedUnlink = TRUE, annexName = "", FSd
     ##
     ############################################################################
     ##
-    if (osType == "Linux") {
+    if (osType == "Windows") {
+      ##
+      clust <- makeCluster(number_processing_threads)
+      clusterExport(clust, setdiff(ls(), c("clust", "selectedFSdbIDs")), envir = environment())
+      ##
+      null_variable <- parLapply(clust, selectedFSdbIDs, function(i) {
+        call_plotFSdb2SpectraCore(i)
+      })
+      ##
+      stopCluster(clust)
+      ##
+      ##########################################################################
+      ##
+    } else {
       ##
       null_variable <- mclapply(selectedFSdbIDs, function(i) {
         call_plotFSdb2SpectraCore(i)
@@ -55,16 +68,6 @@ FSA_plotFSdb2Spectra <- function(path, allowedUnlink = TRUE, annexName = "", FSd
       closeAllConnections()
       ##
       ##########################################################################
-      ##
-    } else if (osType == "Windows") {
-      clust <- makeCluster(number_processing_threads)
-      registerDoParallel(clust)
-      ##
-      null_variable <- foreach(i = selectedFSdbIDs, .verbose = FALSE) %dopar% {
-        call_plotFSdb2SpectraCore(i)
-      }
-      ##
-      stopCluster(clust)
       ##
     }
   }

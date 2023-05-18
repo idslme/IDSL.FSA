@@ -14,6 +14,7 @@ FSdb_file_generator <- function(PARAM_FSdb, output_path = NULL) {
   .logFSA <- NULL
   .logFSA <<- paste0(address_FSDB, "/logFSA_FSDB.txt")
   FSA_logRecorder(paste0(rep("", 100), collapse = "="))
+  FSA_logRecorder("Type <<< citation('IDSL.FSA') >>> for citing this R package in publications.")
   FSA_logRecorder(paste0("Reference MSP libraries: ", input_path_library))
   if (exportFSdbCheck) {
     FSA_logRecorder(paste0("OUTPUT: ", address_FSDB))

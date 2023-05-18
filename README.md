@@ -1,7 +1,7 @@
 # IDSL.FSA <img src='FSA_educational_files/Figures/IDSL.FSA-logo.PNG' width="250px" align="right" />
 
 <!-- badges: start -->
-[![Maintainer](https://img.shields.io/badge/maintainer-Sadjad_Fakouri_Baygi-blue)](https://github.com/sajfb)
+[![Developed-by](https://img.shields.io/badge/Developed_by-Sadjad_Fakouri_Baygi-blue)](https://github.com/sajfb)
 [![CRAN status](https://www.r-pkg.org/badges/version/IDSL.FSA)](https://cran.r-project.org/package=IDSL.FSA)
 ![](http://cranlogs.r-pkg.org/badges/IDSL.FSA?color=orange)
 ![](http://cranlogs.r-pkg.org/badges/grand-total/IDSL.FSA?color=brightgreen)

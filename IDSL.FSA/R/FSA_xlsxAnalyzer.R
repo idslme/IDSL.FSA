@@ -15,6 +15,13 @@ FSA_xlsxAnalyzer <- function(spreadsheet) {
   } else if (length(spreadsheet) == 1) {
     if (typeof(spreadsheet) == "character") {
       if (file.exists(spreadsheet)) {
+        ##
+        readxlPackageCheck <- tryCatch(requireNamespace('readxl', quietly = TRUE), error = function(e) {FALSE})
+        if (!readxlPackageCheck) {
+          warning("IDSL.FSA requires the 'readxl' package of R to read Excel spreadsheets!")
+          stop(" <<< install.packages('readxl') >>> ")
+        }
+        ##
         PARAM_FSA <- readxl::read_xlsx(spreadsheet, sheet = "Start")
         PARAM_FSA <- cbind(PARAM_FSA[, 2], PARAM_FSA[, 4])
         checkpoint_parameter <- TRUE

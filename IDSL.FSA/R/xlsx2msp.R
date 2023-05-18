@@ -1,5 +1,11 @@
 xlsx2msp <- function(path, xlsxFileName = "", number_processing_threads = 1) {
   ##
+  readxlPackageCheck <- tryCatch(requireNamespace('readxl', quietly = TRUE), error = function(e) {FALSE})
+  if (!readxlPackageCheck) {
+    warning("IDSL.FSA requires the 'readxl' package of R to read Excel spreadsheets!")
+    stop(" <<< install.packages('readxl') >>> ")
+  }
+  ##
   xlsxFileLocation <- paste0(path, "/", xlsxFileName)
   xlsxFileLocation <- gsub("\\", "/", xlsxFileLocation, fixed = TRUE)
   strxlsxFileLocation <- strsplit(xlsxFileLocation, "/")[[1]]
@@ -9,7 +15,7 @@ xlsx2msp <- function(path, xlsxFileName = "", number_processing_threads = 1) {
   msp_xlsx <- readxl::read_xlsx(xlsxFileLocation)
   msp_xlsx <- data.frame(msp_xlsx)
   xlsxColNames <- colnames(msp_xlsx)
-  ################################################################################
+  ##############################################################################
   x_IDcol <- which(xlsxColNames == "ID")
   x_mzFcol <- which(xlsxColNames == "mz_fragment")
   x_intFcol <- which(xlsxColNames == "int_fragment")
@@ -69,7 +75,20 @@ xlsx2msp <- function(path, xlsxFileName = "", number_processing_threads = 1) {
     ##
     osType <- Sys.info()[['sysname']]
     ##
-    if (osType == "Linux") {
+    if (osType == "Windows") {
+      ##
+      clust <- makeCluster(number_processing_threads)
+      clusterExport(clust, setdiff(ls(), c("clust")), envir = environment())
+      ##
+      MSPvector <- do.call(c, parLapply(clust, 1:(length(x_diffID) - 1), function(i) {
+        ##
+        call_xlsx2msp(i, msp_xlsx, x_diffID, x_namecol, xlsxColCheck,
+                      xlsxColNames, x_xlsxCol, x_mzFcol, x_intFcol)
+      }))
+      ##
+      stopCluster(clust)
+      ##
+    } else {
       ##
       MSPvector <- do.call(c, mclapply(1:(length(x_diffID) - 1), function(i) {
         ##
@@ -79,26 +98,18 @@ xlsx2msp <- function(path, xlsxFileName = "", number_processing_threads = 1) {
       ##
       closeAllConnections()
       ##
-    } else if (osType == "Windows") {
-      ##
-      clust <- makeCluster(number_processing_threads)
-      registerDoParallel(clust)
-      ##
-      MSPvector <- foreach(i = 1:(length(x_diffID) - 1), .combine = 'c', .verbose = FALSE) %dopar% {
-        ##
-        call_xlsx2msp(i, msp_xlsx, x_diffID, x_namecol, xlsxColCheck,
-                      xlsxColNames, x_xlsxCol, x_mzFcol, x_intFcol)
-      }
-      ##
-      stopCluster(clust)
     }
   }
   ##
   mspFileName <- gsub("[.]xlsx$", ".msp", xlsxFileLocation, ignore.case = TRUE)
-  tryCatch(write.table(MSPvector, file = mspFileName, quote = FALSE, sep = "\n", row.names = FALSE, col.names = FALSE),
-           error = function(e) {stop(paste0("The saving address is problematic for `", mspFileName, "`!"))})
-  ##
-  FSA_message(paste0("`", xlsxFileName, "` was converted into .msp format and stored in the same folder!"), failedMessage = FALSE)
+  tryCatch({
+    write.table(MSPvector, file = mspFileName, quote = FALSE, sep = "\n", row.names = FALSE, col.names = FALSE)
+    FSA_message(paste0("`", xlsxFileName, "` was converted into .msp format and stored in the same folder!"), failedMessage = FALSE)
+    ##
+  }, error = function(e) {
+    stop(paste0("The saving address is problematic for `", mspFileName, "`!"))
+    }
+  )
   ##
   return()
 }

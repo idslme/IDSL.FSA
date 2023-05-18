@@ -1,4 +1,4 @@
-FSA_SpectraSimilarity_xlsxAnalyzer <- function(spreadsheet, checkDataImportExport = TRUE) {
+FSA_SpectraSimilarity_xlsxAnalyzer <- function(spreadsheet) {
   ##
   checkpoint_parameter <- FALSE
   #
@@ -17,6 +17,13 @@ FSA_SpectraSimilarity_xlsxAnalyzer <- function(spreadsheet, checkDataImportExpor
   } else if (typeof(spreadsheet) == "character") {
     if (length(spreadsheet) == 1) {
       if (file.exists(spreadsheet)) {
+        ##
+        readxlPackageCheck <- tryCatch(requireNamespace('readxl', quietly = TRUE), error = function(e) {FALSE})
+        if (!readxlPackageCheck) {
+          warning("IDSL.FSA requires the 'readxl' package of R to read Excel spreadsheets!")
+          stop(" <<< install.packages('readxl') >>> ")
+        }
+        ##
         PARAM_SPEC <- readxl::read_xlsx(spreadsheet, sheet = "SpectraSimilarity")
         PARAM_SPEC <- cbind(PARAM_SPEC[, 2], PARAM_SPEC[, 4])
         checkpoint_parameter <- TRUE
@@ -32,37 +39,35 @@ FSA_SpectraSimilarity_xlsxAnalyzer <- function(spreadsheet, checkDataImportExpor
   ##
   if (checkpoint_parameter) {
     ############################################################################
-    if (checkDataImportExport) {
-      number_processing_threads <- as.numeric(PARAM_SPEC[which(PARAM_SPEC[, 1] == 'SPEC0001'), 2])
-      if (length(number_processing_threads) == 0) {
-        FSA_message("ERROR!!! Problem with SPEC0001! This parameter should be a positive integer!")
-        checkpoint_parameter <- FALSE
-      } else {
-        if (number_processing_threads >= 1) {
-          if ((number_processing_threads %% 1) != 0) {
-            FSA_message("ERROR!!! Problem with SPEC0001! This parameter should be a positive integer!")
-            checkpoint_parameter <- FALSE
-          }
-        } else {
-          FSA_message("ERROR!!! Problem with SPEC0001! This parameter should be at least 1 !")
+    number_processing_threads <- as.numeric(PARAM_SPEC[which(PARAM_SPEC[, 1] == 'SPEC0001'), 2])
+    if (length(number_processing_threads) == 0) {
+      FSA_message("ERROR!!! Problem with SPEC0001! This parameter should be a positive integer!")
+      checkpoint_parameter <- FALSE
+    } else {
+      if (number_processing_threads >= 1) {
+        if ((number_processing_threads %% 1) != 0) {
+          FSA_message("ERROR!!! Problem with SPEC0001! This parameter should be a positive integer!")
           checkpoint_parameter <- FALSE
         }
+      } else {
+        FSA_message("ERROR!!! Problem with SPEC0001! This parameter should be at least 1 !")
+        checkpoint_parameter <- FALSE
       }
-      ##
-      if (number_processing_threads > 1) {
-        x0002 <- which(PARAM_SPEC[, 1] == 'SPEC0002')
-        SPEC0002 <- PARAM_SPEC[x0002, 2]
-        if (is.na(SPEC0002)) {
+    }
+    ##
+    if (number_processing_threads > 1) {
+      x0002 <- which(PARAM_SPEC[, 1] == 'SPEC0002')
+      SPEC0002 <- PARAM_SPEC[x0002, 2]
+      if (is.na(SPEC0002)) {
+        FSA_message("ERROR!!! Problem with SPEC0002!")
+        checkpoint_parameter <- FALSE
+      } else {
+        SPEC0002 <- gsub(" ", "", tolower(SPEC0002))
+        if (SPEC0002 == "samplemode" | SPEC0002 == "peakmode") {
+          PARAM_SPEC[x0002, 2] <- SPEC0002
+        } else {
           FSA_message("ERROR!!! Problem with SPEC0002!")
           checkpoint_parameter <- FALSE
-        } else {
-          SPEC0002 <- gsub(" ", "", tolower(SPEC0002))
-          if (SPEC0002 == "samplemode" | SPEC0002 == "peakmode") {
-            PARAM_SPEC[x0002, 2] <- SPEC0002
-          } else {
-            FSA_message("ERROR!!! Problem with SPEC0002!")
-            checkpoint_parameter <- FALSE
-          }
         }
       }
     }
@@ -234,28 +239,26 @@ FSA_SpectraSimilarity_xlsxAnalyzer <- function(spreadsheet, checkDataImportExpor
       }
     }
     ##
-    if (checkDataImportExport) {
-      maxAllowedNumberHits <- as.numeric(PARAM_SPEC[which(PARAM_SPEC[, 1] == 'SPEC0019'), 2])
-      if (length(maxAllowedNumberHits) == 0) {
+    maxAllowedNumberHits <- as.numeric(PARAM_SPEC[which(PARAM_SPEC[, 1] == 'SPEC0019'), 2])
+    if (length(maxAllowedNumberHits) == 0) {
+      FSA_message("ERROR!!! Problem with SPEC0019! This parameter should be a positive number!")
+      checkpoint_parameter <- FALSE
+    } else {
+      if (maxAllowedNumberHits < 0) {
         FSA_message("ERROR!!! Problem with SPEC0019! This parameter should be a positive number!")
         checkpoint_parameter <- FALSE
-      } else {
-        if (maxAllowedNumberHits < 0) {
-          FSA_message("ERROR!!! Problem with SPEC0019! This parameter should be a positive number!")
-          checkpoint_parameter <- FALSE
-        }
       }
-      ##
-      if (maxAllowedNumberHits > 0) {
-        x0020 <- which(PARAM_SPEC[, 1] == 'SPEC0020')
-        SPEC0020 <- PARAM_SPEC[x0020, 2]
-        if (is.na(SPEC0020)) {
-          FSA_message("ERROR!!! Problem with SPEC0020!")
-          checkpoint_parameter <- FALSE
-        } else {
-          SPEC0020 <- gsub(" ", "", tolower(SPEC0020))
-          PARAM_SPEC[x0020, 2] <- SPEC0020
-        }
+    }
+    ##
+    if (maxAllowedNumberHits > 0) {
+      x0020 <- which(PARAM_SPEC[, 1] == 'SPEC0020')
+      SPEC0020 <- PARAM_SPEC[x0020, 2]
+      if (is.na(SPEC0020)) {
+        FSA_message("ERROR!!! Problem with SPEC0020!")
+        checkpoint_parameter <- FALSE
+      } else {
+        SPEC0020 <- gsub(" ", "", tolower(SPEC0020))
+        PARAM_SPEC[x0020, 2] <- SPEC0020
       }
     }
   }

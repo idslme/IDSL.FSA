@@ -7,7 +7,7 @@ msp to Fragmentation Spectra DataBase (FSDB)
 This function creates an aligned table from the spectra in the .msp file
 }
 \usage{
-msp2TrainingMatrix(path, MSPfile = "", minDetectionFreq = 100,
+msp2TrainingMatrix(path, MSPfile = "", minDetectionFreq = 1,
 selectedFSdbIDs = NULL, dimension = "wide", massAccuracy = 0.01,
 allowedNominalMass = FALSE, allowedWeightedSpectralEntropy = TRUE,
 noiseRemovalRatio = 0.01, number_processing_threads = 1)

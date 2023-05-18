@@ -195,7 +195,31 @@ FSA_uniqueMSPblockTagger <- function(path, MSPfile = "", aggregateBy = "Name", m
         ##
         osType <- Sys.info()[['sysname']]
         ##
-        if (osType == "Linux") {
+        if (osType == "Windows") {
+          ####
+          clust <- makeCluster(number_processing_threads)
+          clusterExport(clust, setdiff(ls(), c("clust", "uniqueAggCompound")), envir = environment())
+          ##
+          listSimilarMSPvariants <- parLapply(clust, uniqueAggCompound, function(i) {
+            call_listSimilarMSPvariants(i)
+          })
+          ##
+          stopCluster(clust)
+          ####
+          names(listSimilarMSPvariants) <- uniqueAggCompound
+          ####
+          clust <- makeCluster(number_processing_threads)
+          clusterExport(clust, setdiff(ls(), c("clust", "uniqueAggCompound")), envir = environment())
+          ##
+          indexUniqueMSPvariants <- do.call(c, parLapply(clust, uniqueAggCompound, function(i) {
+            call_indexUniqueMSPvariants(i)
+          }))
+          ##
+          stopCluster(clust)
+          ##
+          ######################################################################
+          ##
+        } else {
           ##
           listSimilarMSPvariants <- mclapply(uniqueAggCompound, function(i) {
             call_listSimilarMSPvariants(i)
@@ -211,23 +235,6 @@ FSA_uniqueMSPblockTagger <- function(path, MSPfile = "", aggregateBy = "Name", m
           ##
           ######################################################################
           ##
-        } else if (osType == "Windows") {
-          ##
-          clust <- makeCluster(number_processing_threads)
-          registerDoParallel(clust)
-          ##
-          ##
-          listSimilarMSPvariants <- foreach(i = uniqueAggCompound, .verbose = FALSE) %dopar% {
-            call_listSimilarMSPvariants(i)
-          }
-          ##
-          names(listSimilarMSPvariants) <- uniqueAggCompound
-          ##
-          indexUniqueMSPvariants <- foreach(i = uniqueAggCompound, .combine = 'c', .verbose = FALSE) %dopar% {
-            call_indexUniqueMSPvariants(i)
-          }
-          ##
-          stopCluster(clust)
         }
       }
       ##

@@ -64,40 +64,23 @@ FSdb2precursorType <- function(InChIKeyVector, libFSdb, tableIndicator = "Freque
       ##
       libID <- listLibInChIKeyID[[i]]
       if (!is.null(libID)) {
-        precursorMZtype <- data.frame(PrecursorMZ = precursormz[libID], PrecursorType = libPrecursorType[libID])
-        precursorMZtype.agg <- aggregate(precursorMZtype$PrecursorMZ, by = list(precursorMZtype$PrecursorType), FUN = c) ## aggregation function
         ##
-        xNULL <- which(precursorMZtype.agg$Group.1 == "")
-        if (length(xNULL) > 0) {
-          precursorMZtype.agg <- precursorMZtype.agg[-xNULL, ]
-        }
+        listPrecursorMZtype <- base::tapply(precursormz[libID], libPrecursorType[libID], FUN = 'c', simplify = FALSE)
         ##
-        if (length(precursorMZtype.agg) > 0) {
-          listPrecursorMZtype <- precursorMZtype.agg$x
-          namesListPrecursorMZtype <- precursorMZtype.agg$Group.1
-          names(listPrecursorMZtype) <- namesListPrecursorMZtype
-        } else {
-          namesListPrecursorMZtype <- NULL
-        }
-        ##
-      } else {
-        namesListPrecursorMZtype <- NULL
-      }
-      ##
-      do.call(cbind, lapply(uLibPrecursorType, function(j) {
-        jCheck <- j %in% namesListPrecursorMZtype
-        if (jCheck) {
+        do.call(cbind, lapply(uLibPrecursorType, function(j) {
           precMZ <- listPrecursorMZtype[[j]]
-          precMZ <- precMZ[!is.infinite(precMZ)]
-          if (length(precMZ) > 0) {
-            round(median(precMZ), digits = 5)
+          if (!is.null(precMZ)) {
+            precMZ <- precMZ[!is.infinite(precMZ)]
+            if (length(precMZ) > 0) {
+              round(median(precMZ), digits = 5)
+            } else {
+              0
+            }
           } else {
             0
           }
-        } else {
-          0
-        }
-      }))
+        }))
+      }
     }
   } else {
     stop("tableIndicator should be 'Frequency' or 'PrecursorMZ'!")
@@ -113,15 +96,15 @@ FSdb2precursorType <- function(InChIKeyVector, libFSdb, tableIndicator = "Freque
     osType <- Sys.info()[['sysname']]
     if (osType == "Windows") {
       clust <- makeCluster(number_processing_threads)
-      registerDoParallel(clust)
+      clusterExport(clust, setdiff(ls(), c("clust", "InChIKeyVector14")), envir = environment())
       ##
-      precursor_type_frequency <- foreach(i = InChIKeyVector14, .combine = 'rbind', .verbose = FALSE) %dopar% {
+      precursor_type_frequency <- do.call(rbind, parLapply(clust, InChIKeyVector14, function(i) {
         precursor_type_frequency_call(i)
-      }
+      }))
       ##
       stopCluster(clust)
       ##
-    } else if (osType == "Linux") {
+    } else {
       ##
       precursor_type_frequency <- do.call(rbind, mclapply(InChIKeyVector14, function(i) {
         precursor_type_frequency_call(i)

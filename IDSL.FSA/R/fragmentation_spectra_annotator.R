@@ -105,10 +105,12 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
   ##################### Aggregated Library Spectra Markers #####################
   libSpectraMarkersIndex <- libFSdbIDlist[[1]]
   libNspectraMarkers <- libFSdbIDlist[[2]]
+  libFSdbIDlist <- NULL
   ##############################################################################
   ################## Matching against the aggregated library ###################
   sampleIndexListSpectraMarkers <- sampleFSdbIDlist[[1]]
   sampleNspectraMarkers <- sampleFSdbIDlist[[2]]
+  sampleFSdbIDlist <- NULL
   ####
   sampleSpectraMarkers <- as.character(round(sampleIndexListSpectraMarkers[, 1], digits = roundingDigitPrefiltering))
   if (length(sampleSpectraMarkers) > 0) {
@@ -290,7 +292,7 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
                     if (ionRangeDifference >= minIonRangeDifference) {
                       ############ Normalized Euclidean Mass Error #############
                       if (allowedNominalMass) {
-                        NEME <- NA
+                        NEME <- 0
                       } else {
                         matchedLibFragmentList <- libFragmentList[indexMatchedLib, ]
                         if (minMatchedNumPeaks == 1) {
@@ -344,7 +346,11 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
               ##
               ##################################################################
               ##
-              strSampleSpectralEntropy <- paste0("S = ", sampleSpectralEntropy)
+              if (sampleFSdb[["logFSdb"]][["allowedWeightedSpectralEntropy"]]) {
+                strSampleSpectralEntropy <- paste0("wS = ", sampleSpectralEntropy)
+              } else {
+                strSampleSpectralEntropy <- paste0("S = ", sampleSpectralEntropy)
+              }
               ##
               maxNumberHits <- min(c(maxAllowedNumberHits, numberMatchedFSAspectra))
               ##
@@ -460,7 +466,13 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
                   mtext(file_name_msp, side = 3, adj = 0, line = 0.25, cex = 1.15, col = colors[1])
                   mtext(sampleCompoundName[FSApeakID], side = 3, adj = 1, line = 1.5, cex = 1.10, col = colors[1])
                   ## sample info
-                  mtext(paste0("S = ", libSpectralEntropy), side = 1, adj = 1, line = 0.225, cex = 1.0, col = colors[2])
+                  if (libFSdb[["logFSdb"]][["allowedWeightedSpectralEntropy"]]) {
+                    strLibSpectralEntropy <- paste0("wS = ", libSpectralEntropy)
+                  } else {
+                    strLibSpectralEntropy <- paste0("S = ", libSpectralEntropy)
+                  }
+                  ##
+                  mtext(strLibSpectralEntropy, side = 1, adj = 1, line = 0.225, cex = 1.0, col = colors[2])
                   mtext(refMSPfilename[IDj], side = 1, adj = 0, line = 0.25, cex = 1.15, col = colors[2])
                   mtext(refCompoundName[IDj], side = 1, adj = 1, line = 1.5, cex = 1.10, col = colors[2])
                   ## legend
@@ -514,10 +526,38 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
         call_fragment_matcher(i)
       }))
       ##
+      ##########################################################################
+      ##
     } else {
+      ##
       osType <- Sys.info()[['sysname']]
       ##
-      if (osType == "Linux") {
+      if (osType == "Windows") {
+        ####
+        clust <- makeCluster(number_processing_threads)
+        clusterExport(clust, setdiff(ls(), c("clust", "L_x_Index")), envir = environment())
+        ##
+        listFSApeakIDlibID <- parLapply(clust, 1:L_x_Index, function(i) {
+          call_listFSApeakIDlibID(i)
+        })
+        stopCluster(clust)
+        ####
+        libSpectraMarkersIndex <- NULL
+        sampleSpectraMarkers <- NULL
+        sampleIndexListSpectraMarkers <- NULL
+        libIDspectraMarkersList <- NULL
+        ####
+        clust <- makeCluster(number_processing_threads)
+        clusterExport(clust, setdiff(ls(), c("clust", "L_x_Index")), envir = environment())
+        ##
+        FSAannotationList <- do.call(rbind, parLapply(clust, 1:L_x_Index, function(i) {
+          call_fragment_matcher(i)
+        }))
+        stopCluster(clust)
+        ##
+        ########################################################################
+        ##
+      } else {
         ####
         listFSApeakIDlibID <- mclapply(1:L_x_Index, function(i) {
           call_listFSApeakIDlibID(i)
@@ -534,25 +574,6 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
         ####
         closeAllConnections()
         ##
-      } else if (osType == "Windows") {
-        ##
-        clust <- makeCluster(number_processing_threads)
-        registerDoParallel(clust)
-        ####
-        listFSApeakIDlibID <- foreach(i = 1:L_x_Index, .verbose = FALSE) %dopar% {
-          call_listFSApeakIDlibID(i)
-        }
-        ####
-        libSpectraMarkersIndex <- NULL
-        sampleSpectraMarkers <- NULL
-        sampleIndexListSpectraMarkers <- NULL
-        libIDspectraMarkersList <- NULL
-        ####
-        FSAannotationList <- foreach(i = 1:L_x_Index, .combine = 'rbind', .verbose = FALSE) %dopar% {
-          call_fragment_matcher(i)
-        }
-        ####
-        stopCluster(clust)
       }
     }
     ############################################################################
@@ -599,7 +620,7 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
           mspMatch$analyte_idsl.ipa_peakid <- NULL
           ##
           listIPApeakIDname <- FSA_R.aggregate(mspMatch$analyte_name)
-          uniqueAnalyteName <- names(listIPApeakIDname)
+          uniqueAnalyteName <- unique(mspMatch$analyte_name)
           ##
           call_collective_peakIDs <- function(i) {
             x_i <- listIPApeakIDname[[i]]
@@ -638,7 +659,20 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
             ##
           } else {
             ##
-            if (osType == "Linux") {
+            if (osType == "Windows") {
+              ##
+              clust <- makeCluster(number_processing_threads)
+              clusterExport(clust, c("call_collective_peakIDs", "listIPApeakIDname", "mspMatch", "sampleFSdb"), envir = environment())
+              ##
+              mspMatch <- do.call(rbind, parLapply(clust, uniqueAnalyteName, function(i) {
+                call_collective_peakIDs(i)
+              }))
+              ##
+              stopCluster(clust)
+              ##
+              ##################################################################
+              ##
+            } else {
               ##
               mspMatch <- do.call(rbind, mclapply(uniqueAnalyteName, function(i) {
                 call_collective_peakIDs(i)
@@ -646,16 +680,6 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
               ##
               closeAllConnections()
               ##
-            } else if (osType == "Windows") {
-              ##
-              clust <- makeCluster(number_processing_threads)
-              registerDoParallel(clust)
-              ##
-              mspMatch <- foreach(i = uniqueAnalyteName, .combine = 'rbind', .verbose = FALSE) %dopar% {
-                call_collective_peakIDs(i)
-              }
-              ##
-              stopCluster(clust)
             }
           }
           ##

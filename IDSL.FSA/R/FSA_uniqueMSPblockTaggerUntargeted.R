@@ -151,7 +151,19 @@ FSA_uniqueMSPblockTaggerUntargeted <- function(path, MSPfile_vector, minCSAdetec
           ##
           ######################################################################
           ##
-          if (osType == "Linux") {
+          if (osType == "Windows") {
+            clust <- makeCluster(number_processing_threads)
+            clusterExport(clust, setdiff(ls(), c("clust", "selectedFSdbIDs")), envir = environment())
+            ##
+            null_variable <- parLapply(clust, selectedFSdbIDs, function(i) {
+              call_plotUniqueTag(i)
+            })
+            ##
+            stopCluster(clust)
+            ##
+            ####################################################################
+            ##
+          } else {
             ##
             null_variable <- mclapply(selectedFSdbIDs, function(i) {
               call_plotUniqueTag(i)
@@ -160,16 +172,6 @@ FSA_uniqueMSPblockTaggerUntargeted <- function(path, MSPfile_vector, minCSAdetec
             closeAllConnections()
             ##
             ####################################################################
-            ##
-          } else if (osType == "Windows") {
-            clust <- makeCluster(number_processing_threads)
-            registerDoParallel(clust)
-            ##
-            null_variable <- foreach(i = selectedFSdbIDs, .verbose = FALSE) %dopar% {
-              call_plotUniqueTag(i)
-            }
-            ##
-            stopCluster(clust)
             ##
           }
         }
@@ -188,7 +190,7 @@ FSA_uniqueMSPblockTaggerUntargeted <- function(path, MSPfile_vector, minCSAdetec
       ##
       FSdb2msp(path = paste0(path,"/UNIQUETAGS"), FSdbFileName = "uniqueMSPtagsUntargeted.Rdata", UnweightMSP = FALSE, number_processing_threads)
     } else {
-      FSA_logRecorder(paste0("No common msp blocks was found using absolute frequency of detection >= ` ", minCSAdetectionFrequency,"` in the untargeted unique tag analysis!"))
+      FSA_logRecorder(paste0("No common msp blocks was found using absolute frequency of detection >= `", minCSAdetectionFrequency,"` in the untargeted unique tag analysis!"))
     }
   } else {
     FSA_logRecorder("The `basePeakIntensity` meta-variable was not found in the .msp files!")

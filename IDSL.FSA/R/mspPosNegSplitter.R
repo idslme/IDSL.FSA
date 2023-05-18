@@ -65,24 +65,30 @@ mspPosNegSplitter <- function(path, MSPfile = "", number_processing_threads = 1)
     ##
     osType <- Sys.info()[['sysname']]
     if (osType == "Windows") {
-      clust <- makeCluster(number_processing_threads)
-      registerDoParallel(clust)
       ##
       if (ionModeNegCheck) {
-        negativeMSPblocks <- foreach(i = xIonModeNeg, .combine = 'c', .verbose = FALSE) %dopar% {
+        clust <- makeCluster(number_processing_threads)
+        clusterExport(clust, setdiff(ls(), c("clust", "xIonModeNeg", "xIonModePos")), envir = environment())
+        ##
+        negativeMSPblocks <- do.call(c, parLapply(clust, xIonModeNeg, function(i) {
           call_MSPblocks(i)
-        }
+        }))
+        ##
+        stopCluster(clust)
       }
       ##
-      if (ionModePosCheck) {
-        positiveMSPblocks <- foreach(i = xIonModePos, .combine = 'c', .verbose = FALSE) %dopar% {
+      if (ionModeNegCheck) {
+        clust <- makeCluster(number_processing_threads)
+        clusterExport(clust, setdiff(ls(), c("clust", "xIonModeNeg", "xIonModePos")), envir = environment())
+        ##
+        positiveMSPblocks <- do.call(c, parLapply(clust, xIonModePos, function(i) {
           call_MSPblocks(i)
-        }
+        }))
+        ##
+        stopCluster(clust)
       }
       ##
-      stopCluster(clust)
-      ##
-    } else if (osType == "Linux") {
+    } else {
       ##
       if (ionModeNegCheck) {
         negativeMSPblocks <- do.call(c, mclapply(xIonModeNeg, function(i) {
