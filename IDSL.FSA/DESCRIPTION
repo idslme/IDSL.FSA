@@ -1,7 +1,7 @@
 Package: IDSL.FSA
 Type: Package
 Title: Fragmentation Spectra Analysis (FSA)
-Version: 1.1
+Version: 1.2
 Authors@R: c(
     person(family = "Fakouri-Baygi", given = "Sadjad", email = "sadjad.fakouri-baygi@mssm.edu",
     role = "aut", comment = c(ORCID = "0000-0002-6864-6911")),
@@ -12,7 +12,7 @@ Suggests: readxl
 Author: Sadjad Fakouri-Baygi [aut] (<https://orcid.org/0000-0002-6864-6911>),
         Dinesh Barupal [cre, aut] (<https://orcid.org/0000-0002-9954-8628>)
 Maintainer: Dinesh Barupal <dinesh.barupal@mssm.edu>
-Description: The 'IDSL.FSA' package was designed to annotate standard .msp (mass spectra format) and .mgf (Mascot generic format) files using mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME) followed by intelligent pre-filtering steps for rapid spectra searches. 'IDSL.FSA' also provides a number of modules to convert and manipulate .msp and .mgf files. The 'IDSL.FSA' workflow was integrated in the 'IDSL.CSA' and 'IDSL.NPA' packages introduced in <doi:10.1101/2023.02.09.527886>.
+Description: The 'IDSL.FSA' package was designed to annotate standard .msp (mass spectra format) and .mgf (Mascot generic format) files using mass spectral entropy similarity, dot product (cosine) similarity, and normalized Euclidean mass error (NEME) followed by intelligent pre-filtering steps for rapid spectra searches. 'IDSL.FSA' also provides a number of modules to convert and manipulate .msp and .mgf files. The 'IDSL.FSA' workflow was integrated in the 'IDSL.CSA' and 'IDSL.NPA' packages introduced in <doi:10.1021/acs.analchem.3c00376>.
 License: MIT + file LICENSE
 URL: https://github.com/idslme/idsl.fsa
 BugReports: https://github.com/idslme/idsl.fsa/issues
