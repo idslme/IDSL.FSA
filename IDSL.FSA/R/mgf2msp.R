@@ -81,7 +81,7 @@ mgf2msp <- function(path, MGFfile = "") {
   ##
   ##############################################################################
   ##
-  mgf <- gsub("=", ": ", mgf)
+  mgf <- as.character(sapply(mgf, function(x) {sub("=", ": ",x)}))
   ##
   MSP <- do.call(c, lapply(1:length(xBeginIons), function(i) {
     pasteMSP <- mgf[xName[i]]
