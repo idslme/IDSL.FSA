@@ -37,42 +37,28 @@ FSdb2PeakXcolSubsetter <- function(FSdb_address, peak_alignment_folder, metavari
     ##
     ############################################################################
     ############################################################################
+    ## Processing OS
+    osType <- Sys.info()[['sysname']]
     ##
-    if (number_processing_threads == 1) {
+    if ((number_processing_threads == 1) || (osType == "Windows")) {
       ##
       subsetAlignedPeakIDs <- do.call(c, lapply(uniqueFileNameHRMS, function(i) {
         call_FSdb2PeakXcolSubsetter(i)
       }))
       ##
-    } else {
-      ## Processing OS
-      osType <- Sys.info()[['sysname']]
       ##
       ##########################################################################
       ##
-      if (osType == "Windows") {
-        clust <- makeCluster(number_processing_threads)
-        clusterExport(clust, setdiff(ls(), c("clust", "uniqueFileNameHRMS")), envir = environment())
-        ##
-        subsetAlignedPeakIDs <- do.call(c, parLapply(clust, uniqueFileNameHRMS, function(i) {
-          call_FSdb2PeakXcolSubsetter(i)
-        }))
-        ##
-        stopCluster(clust)
-        ##
-        ########################################################################
-        ##
-      } else {
-        ##
-        subsetAlignedPeakIDs <- do.call(c, mclapply(uniqueFileNameHRMS, function(i) {
-          call_FSdb2PeakXcolSubsetter(i)
-        }, mc.cores = number_processing_threads))
-        ##
-        closeAllConnections()
-        ##
-        ########################################################################
-        ##
-      }
+    } else {
+      ##
+      subsetAlignedPeakIDs <- do.call(c, mclapply(uniqueFileNameHRMS, function(i) {
+        call_FSdb2PeakXcolSubsetter(i)
+      }, mc.cores = number_processing_threads))
+      ##
+      closeAllConnections()
+      ##
+      ##########################################################################
+      ##
     }
     ##
     ############################################################################

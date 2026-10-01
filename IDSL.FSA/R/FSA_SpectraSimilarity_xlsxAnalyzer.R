@@ -169,12 +169,7 @@ FSA_SpectraSimilarity_xlsxAnalyzer <- function(spreadsheet) {
     }
     ##
     x0013 <- which(PARAM_SPEC[, 1] == 'SPEC0013')
-    allowedWeightedSpectralEntropy <- tolower(gsub(" ", "", PARAM_SPEC[x0013, 2]))
-    if (allowedWeightedSpectralEntropy == "1" | allowedWeightedSpectralEntropy == "t" | allowedWeightedSpectralEntropy == "true") {
-      allowedWeightedSpectralEntropy <- TRUE
-    } else {
-      allowedWeightedSpectralEntropy <- FALSE
-    }
+    allowedWeightedSpectralEntropy <- grepl("t", tolower(PARAM_SPEC[x0013, 2]))
     PARAM_SPEC[x0013, 2] <- allowedWeightedSpectralEntropy
     ##
     minIonRangeDifference <- as.numeric(PARAM_SPEC[which(PARAM_SPEC[, 1] == 'SPEC0014'), 2])

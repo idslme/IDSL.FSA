@@ -201,7 +201,7 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
       clust <- makeCluster(NPT0)
       clusterExport(clust, setdiff(ls(), c("clust", "file_name_sample_msp")), envir = environment())
       ##
-      null_variable <- parLapply(clust, file_name_sample_msp, function(iFileNameMSP) {
+      null_variable <- parLapplyLB(clust, file_name_sample_msp, function(iFileNameMSP) {
         ##
         tryCatch(call_msp_annotator(iFileNameMSP),
                  error = function(e) {FSA_logRecorder(paste0("Problem with `", iFileNameMSP,"`!"))})
@@ -217,7 +217,7 @@ FSA_msp_annotator <- function(PARAM_SPEC, libFSdb, address_input_msp, output_pat
         ##
         tryCatch(call_msp_annotator(iFileNameMSP),
                  error = function(e) {FSA_logRecorder(paste0("Problem with `", iFileNameMSP,"`!"))})
-      }, mc.cores = NPT0)
+      }, mc.cores = NPT0, mc.preschedule = FALSE)
       ##
       closeAllConnections()
       ##

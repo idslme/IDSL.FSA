@@ -229,7 +229,7 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
             ##
             nSpectraMarkersIDj <- libNspectraMarkers[IDj]
             ##
-            matchedSampleFragmentList <- matrix(rep(0, libNumPeaks*2), ncol = 2)
+            matchedSampleFragmentList <- matrix(0, nrow = libNumPeaks, ncol = 2)
             indexMatchedLib <- rep(0, libNumPeaks)
             matchedNumPeaks <- 0
             f <- 1
@@ -511,7 +511,10 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
       return(matchedFSAlist)
     }
     ############################################################################
-    if (number_processing_threads == 1) {
+    ##
+    osType <- Sys.info()[['sysname']]
+    ##
+    if ((number_processing_threads == 1) || (osType == "Windows")) {
       ####
       listFSApeakIDlibID <- lapply(1:L_x_Index, function(i) {
         call_listFSApeakIDlibID(i)
@@ -529,52 +532,22 @@ fragmentation_spectra_annotator <- function(path, MSPfile = "", libFSdb, libFSdb
       ##########################################################################
       ##
     } else {
+      ####
+      listFSApeakIDlibID <- mclapply(1:L_x_Index, function(i) {
+        call_listFSApeakIDlibID(i)
+      }, mc.cores = number_processing_threads)
+      ####
+      libSpectraMarkersIndex <- NULL
+      sampleSpectraMarkers <- NULL
+      sampleIndexListSpectraMarkers <- NULL
+      libIDspectraMarkersList <- NULL
+      ####
+      FSAannotationList <- do.call(rbind, mclapply(1:L_x_Index, function(i) {
+        call_fragment_matcher(i)
+      }, mc.cores = number_processing_threads))
+      ####
+      closeAllConnections()
       ##
-      osType <- Sys.info()[['sysname']]
-      ##
-      if (osType == "Windows") {
-        ####
-        clust <- makeCluster(number_processing_threads)
-        clusterExport(clust, setdiff(ls(), c("clust", "L_x_Index")), envir = environment())
-        ##
-        listFSApeakIDlibID <- parLapply(clust, 1:L_x_Index, function(i) {
-          call_listFSApeakIDlibID(i)
-        })
-        stopCluster(clust)
-        ####
-        libSpectraMarkersIndex <- NULL
-        sampleSpectraMarkers <- NULL
-        sampleIndexListSpectraMarkers <- NULL
-        libIDspectraMarkersList <- NULL
-        ####
-        clust <- makeCluster(number_processing_threads)
-        clusterExport(clust, setdiff(ls(), c("clust", "L_x_Index")), envir = environment())
-        ##
-        FSAannotationList <- do.call(rbind, parLapply(clust, 1:L_x_Index, function(i) {
-          call_fragment_matcher(i)
-        }))
-        stopCluster(clust)
-        ##
-        ########################################################################
-        ##
-      } else {
-        ####
-        listFSApeakIDlibID <- mclapply(1:L_x_Index, function(i) {
-          call_listFSApeakIDlibID(i)
-        }, mc.cores = number_processing_threads)
-        ####
-        libSpectraMarkersIndex <- NULL
-        sampleSpectraMarkers <- NULL
-        sampleIndexListSpectraMarkers <- NULL
-        libIDspectraMarkersList <- NULL
-        ####
-        FSAannotationList <- do.call(rbind, mclapply(1:L_x_Index, function(i) {
-          call_fragment_matcher(i)
-        }, mc.cores = number_processing_threads))
-        ####
-        closeAllConnections()
-        ##
-      }
     }
     ############################################################################
     if (!is.null(FSAannotationList)) {

@@ -94,7 +94,7 @@ FSA_workflow <- function(spreadsheet) {
           clust <- makeCluster(NPT)
           clusterExport(clust, "address_input_msp", envir = environment())
           ##
-          null_variable <- parLapply(clust, entireMGF, function(i) {
+          null_variable <- parLapplyLB(clust, entireMGF, function(i) {
             tryCatch(mgf2msp(path = address_input_msp, MGFfile = i), error = function(e) {FSA_logRecorder(paste0("Problem with `", i,"`!"))})
           })
           ##
@@ -106,7 +106,7 @@ FSA_workflow <- function(spreadsheet) {
           ##
           null_variable <- mclapply(entireMGF, function(i) {
             tryCatch(mgf2msp(path = address_input_msp, MGFfile = i), error = function(e) {FSA_logRecorder(paste0("Problem with `", i,"`!"))})
-          }, mc.cores = NPT)
+          }, mc.cores = NPT, mc.preschedule = FALSE)
           ##
           closeAllConnections()
           ##

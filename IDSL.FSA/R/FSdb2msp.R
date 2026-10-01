@@ -173,7 +173,7 @@ FSdb2msp <- function(path, FSdbFileName = "", UnweightMSP = FALSE, number_proces
   ##
   write.table(MSP, file = mspFileName, quote = FALSE, sep = "\n", row.names = FALSE, col.names = FALSE)
   ##
-  FSA_logRecorder(paste0("`", FSdbFileName, "` was convereted into the .msp format and stored as `", mspFileName, "`!"))
+  FSA_logRecorder(paste0("`", FSdbFileName, "` was converted into the .msp format and stored as `", mspFileName, "`!"))
   ##
   return()
 }
