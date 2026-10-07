@@ -5,7 +5,7 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/IDSL.FSA)](https://cran.r-project.org/package=IDSL.FSA)
 ![](http://cranlogs.r-pkg.org/badges/IDSL.FSA?color=orange)
 ![](http://cranlogs.r-pkg.org/badges/grand-total/IDSL.FSA?color=brightgreen)
-[![Dependencies](https://tinyverse.netlify.com/badge/IDSL.FSA)](https://cran.r-project.org/package=IDSL.FSA)
+[![Dependencies](<https://tinyverse.netlify.app/badge/IDSL.FSA>)](<https://cran.r-project.org/package=IDSL.FSA>)
 
 
 [![DOI](https://zenodo.org/badge/140601694.svg)](https://zenodo.org/record/7530397#.Y8Byuv7MK70)
@@ -89,4 +89,4 @@ FSA_workflow("Address of the FSA parameter spreadsheet")
 
 ## Citation
 
-[1] Fakouri Baygi, S., Kumar, Y. Barupal, D.K. [IDSL.CSA: Composite Spectra Analysis for Chemical Annotation of Untargeted Metabolomics Datasets](https://doi.org/10.1021/acs.analchem.3c00376). *Analytical Chemistry*, **2023**, *95(25)*, 9480–9487.
+[1] Fakouri Baygi, S., Kumar, Y. Barupal, D.K. [IDSL.CSA: Composite Spectra Analysis for Chemical Annotation of Untargeted Metabolomics Datasets](https://doi.org/10.1021/acs.analchem.3c00376). *Analytical Chemistry*, **2023**, *95(25)*, 9480ï¿½9487.

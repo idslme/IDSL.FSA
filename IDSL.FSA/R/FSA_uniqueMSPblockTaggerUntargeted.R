@@ -36,7 +36,12 @@ FSA_uniqueMSPblockTaggerUntargeted <- function(path, MSPfile_vector = "", peak_a
             listCorrectedRTpeaklists <- FSA_loadRdata(paste0(peak_alignment_folder, "/listCorrectedRTpeaklists.Rdata"))
             names(listCorrectedRTpeaklists) <- gsub("^peaklist_|.Rdata$", "", names(listCorrectedRTpeaklists), ignore.case = TRUE)
             ##
-            mzMLfilename <- gsub("^DDA_MSP_|^DDA_REF_MSP_|^DIA_MSP_|^DIA_REF_MSP_|^CSA_MSP_|^CSA_REF_MSP_|.msp$", "", FSdb[["MSPLibraryParameters"]][["MSPfilename"]], ignore.case = TRUE)
+            if (all(grepl("uniqueMSPtagsUntargeted.msp", FSdb[["MSPLibraryParameters"]][["MSPfilename"]]))) {
+              mspfilename <- "mspfilename"
+            } else {
+              mspfilename <- "MSPfilename"
+            }
+            mzMLfilename <- gsub("^DDA_MSP_|^DDA_REF_MSP_|^DIA_MSP_|^DIA_REF_MSP_|^CSA_MSP_|^CSA_REF_MSP_|.msp$", "", FSdb[["MSPLibraryParameters"]][[mspfilename]], ignore.case = TRUE)
             tmzMLfilename <- base::tapply(seq(1, nFSdb, 1), mzMLfilename, FUN = 'c', simplify = FALSE)
             ##
             ####################################################################
